@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "dyna-bookmarks",
+  "version": "0.0.1",
+  "description": "This extensions allows you to save and open browser bookmarks directly to or from a dynalist document.",
+  "homepage_url": "https://gitlab.com/remolueoend/dyna-bookmarks",
+  "icons": {
+    "48": "src/components/home/border-48.png"
+  },
+  "permissions": ["activeTab", "<all_urls>"],
+
+  "browser_action": {
+    "default_icon": "src/components/home/border-48.png",
+    "default_title": "Dyna-Bookmarks",
+    "default_popup": "dist/popup.html"
+  },
+  "background": {
+    "page": "dist/background.html"
+  },
+  "web_accessible_resources": [
+    "beasts/frog.jpg",
+    "beasts/turtle.jpg",
+    "beasts/snake.jpg"
+  ]
+}

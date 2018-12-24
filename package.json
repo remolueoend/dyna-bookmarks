@@ -1,0 +1,34 @@
+{
+  "name": "dyna-bookmarks",
+  "version": "0.0.1",
+  "description": "This extensions allows you to save and open browser bookmarks directly to or from a dynalist document.",
+  "main": "dist/main.js",
+  "repository": "git@gitlab.com:remolueoend/dyna-bookmarks.git",
+  "author": "Remo Zumsteg <remolueoend@users.noreply.github.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "@types/firefox-webext-browser": "^64.0.0",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-redux": "^6.0.11",
+    "babel-loader": "^8.0.4",
+    "fork-ts-checker-webpack-plugin": "^0.5.2",
+    "html-webpack-plugin": "^3.2.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^5.3.2",
+    "typescript": "^3.2.2",
+    "web-ext": "^2.9.3",
+    "web-ext-webpack-plugin": "https://github.com/hiikezoe/web-ext-webpack-plugin.git",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "redux-webext": "^1.1.2"
+  }
+}
