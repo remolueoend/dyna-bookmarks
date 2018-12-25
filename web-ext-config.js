@@ -11,5 +11,9 @@ module.exports = {
     "webpack.config.js",
     "web-ext-config.js",
     "package.json",
+    "jest.config.js",
+    "jest.setup.js",
+    ".babelrc",
+    "__mocks__",
   ],
 }

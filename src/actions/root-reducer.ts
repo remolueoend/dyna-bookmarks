@@ -1,19 +1,12 @@
 import { combineReducers } from "redux"
 import { Action, ActionFunction1 } from "redux-actions"
+import { reducer } from "../lib/reducer-builder"
+import { AppState } from "../redux/state"
 import {
   decreaseBackgroundCounter,
   increaseBackgroundCounter,
 } from "./background-counter"
-import { reducer } from "./helpers"
 import { decreaseUICounter, increaseUICounter } from "./ui-counter"
-
-export interface CounterState {
-  counter: number
-}
-export interface AppState {
-  uiCounter: CounterState
-  backgroundCounter: CounterState
-}
 
 const createCounterReducer = (
   increaseAction: ActionFunction1<number, Action<number>>,

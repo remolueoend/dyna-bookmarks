@@ -1,7 +1,7 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import * as actions from "../../actions/ui-counter"
-import { AppState, CounterState } from "../../redux"
+import { AppState, CounterState } from "../../redux/state"
 
 export interface HomeProps {
   backgroundCounter: CounterState
