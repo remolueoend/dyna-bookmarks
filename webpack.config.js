@@ -2,7 +2,7 @@ const path = require('path')
 // const CopyPlugin = require('copy-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const WebExtWebpackPlugin = require('web-ext-webpack-plugin')
+// const WebExtWebpackPlugin = require('web-ext-webpack-plugin')
 
 const PAGES_PATH = './src/pages'
 const babelOptions = {
@@ -78,7 +78,7 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin({
       tsconfig: './tsconfig.json',
     }),
-    new WebExtWebpackPlugin({ sourceDir: './dist' }),
+    // new WebExtWebpackPlugin({ sourceDir: './dist' }),
   ],
   // externals: {
   //   react: 'React',

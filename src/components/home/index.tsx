@@ -1,29 +1,29 @@
-import * as React from 'react'
-import * as actions from '../../pages/popup/actions'
-import { connect } from 'react-redux'
-import { AppState, CounterState } from '../../redux'
+import * as React from "react"
+import { connect } from "react-redux"
+import * as actions from "../../actions/ui-counter"
+import { AppState, CounterState } from "../../redux"
 
 export interface HomeProps {
   backgroundCounter: CounterState
   uiCounter: CounterState
-  incrementUICounter: () => void
-  decrementUICounter: () => void
+  increaseUICounter: (value: number) => void
+  decreaseUICounter: (value: number) => void
 }
 
 const Home: React.SFC<HomeProps> = ({
   backgroundCounter,
   uiCounter,
-  incrementUICounter,
-  decrementUICounter,
+  increaseUICounter,
+  decreaseUICounter,
 }) => (
   <div style={{ width: 200 }}>
     <div>Background counter: {backgroundCounter.counter}</div>
     <div>
       UI counter: {uiCounter.counter}
       <div>
-        <button onClick={decrementUICounter}>-</button>
-        <span> </span>
-        <button onClick={incrementUICounter}>+</button>
+        <button onClick={() => decreaseUICounter(3)}>-</button>
+        <span />
+        <button onClick={() => increaseUICounter(3)}>+</button>
       </div>
     </div>
   </div>

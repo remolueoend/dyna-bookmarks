@@ -7,17 +7,35 @@
   "author": "Remo Zumsteg <remolueoend@users.noreply.github.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "clear": "rm -rf ./dist && rm -rf ./web-ext-artifacts",
+    "build": "webpack && web-ext lint && web-ext build --overwrite-dest",
+    "build.watch": "webpack -w",
+    "start": "web-ext run",
+    "dev": "run-p build.watch start",
+    "lint": "tslint --project .",
+    "lint.fix": "yarn lint --fix"
+  },
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",
     "@types/firefox-webext-browser": "^64.0.0",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^6.0.11",
+    "@types/redux-actions": "^2.3.1",
     "babel-loader": "^8.0.4",
     "fork-ts-checker-webpack-plugin": "^0.5.2",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^1.2.1",
+    "lint-staged": "^8.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.15.3",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^5.3.2",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-react": "^3.6.0",
     "typescript": "^3.2.2",
     "web-ext": "^2.9.3",
     "web-ext-webpack-plugin": "https://github.com/hiikezoe/web-ext-webpack-plugin.git",
@@ -29,6 +47,23 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-actions": "^2.6.4",
     "redux-webext": "^1.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ],
+    "*.{json,md,yaml,yml}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

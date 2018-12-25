@@ -1,0 +1,20 @@
+{
+  "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
+  "rules": {
+    "interface-name": false,
+    "no-empty-interface": false,
+    "prefer-template": true,
+    "prettier": true,
+    "jsx-boolean-value": false,
+    "jsx-no-lambda": false,
+    "jsx-no-multiline-js": false,
+    "no-unused-variable": [true, "check-parameters"],
+    "trailing-comma": [true, { "multiline": "always", "singleline": "never" }],
+    "semicolon": [true, "never"],
+    "object-literal-sort-keys": false
+  },
+  "linterOptions": {
+    "exclude": ["**/*.js"]
+  }
+}
