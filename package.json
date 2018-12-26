@@ -3,9 +3,9 @@
   "version": "0.0.2",
   "description": "This extensions allows you to save and open browser bookmarks directly to or from a dynalist document.",
   "main": "dist/main.js",
-  "repository": "git@gitlab.com:remolueoend/dyna-bookmarks.git",
+  "repository": "git@github.com:remolueoend/dyna-bookmarks.git",
   "author": "Remo Zumsteg <remolueoend@users.noreply.github.com>",
-  "homepage": "https://gitlab.com/remolueoend/dyna-bookmarks",
+  "homepage": "https://github.com/remolueoend/dyna-bookmarks",
   "license": "MIT",
   "private": false,
   "scripts": {
