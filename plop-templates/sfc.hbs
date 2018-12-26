@@ -1,6 +1,12 @@
+import styled from "styled-components"
+
 export interface {{name}}Props {
   style?: {}
   className?: string
 }
 
-export const {{name}}: React.SFC<{{name}}Props> = ({ style, className }) => ({})
+const {{name}}Base = styled.div``
+
+export const {{name}}: React.SFC<{{name}}Props> = ({ style, className }) => (
+  <{{name}}Base></{{name}}Base>
+)
