@@ -4,6 +4,7 @@ const HtmlPlugin = require("html-webpack-plugin")
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
 const WebextensionPlugin = require("webpack-webextension-plugin")
 const { name, version, description, homepage } = require("./package.json")
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
 const VENDOR = process.env.WEB_EXT_VENDOR || "firefox"
 const babelOptions = {
@@ -16,6 +17,7 @@ function generateHtmlPlugins(items) {
       new HtmlPlugin({
         filename: `./${name}.html`,
         chunks: [name],
+        title: `dyna-bookmarks_${name}`,
       }),
   )
 }
@@ -35,6 +37,9 @@ module.exports = {
   resolve: {
     modules: [getSrcPath(), "node_modules"],
     extensions: [".ts", ".tsx", ".js", ".json"],
+  },
+  optimization: {
+    minimizer: [new UglifyJsPlugin()],
   },
   devtool: "inline-source-map",
   mode: process.env.NODE_ENV || "development",

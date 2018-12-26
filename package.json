@@ -10,10 +10,10 @@
   "private": false,
   "scripts": {
     "clear": "rm -rf ./dist && rm -rf ./web-ext-artifacts",
-    "build": "webpack && web-ext lint && web-ext build",
+    "build": "webpack --optimize-minimize --mode production && web-ext lint && web-ext build",
     "build.watch": "webpack -w",
     "start": "web-ext run",
-    "dev": "run-p build.watch start",
+    "dev": "yarn build && run-p build.watch start",
     "lint": "tslint --project .",
     "lint.fix": "yarn lint --fix",
     "test": "jest"
@@ -55,6 +55,7 @@
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^3.6.0",
     "typescript": "^3.2.2",
+    "uglifyjs-webpack-plugin": "^2.1.0",
     "web-ext": "^2.9.3",
     "web-ext-webpack-plugin": "https://github.com/hiikezoe/web-ext-webpack-plugin.git",
     "webpack": "^4.28.2",
