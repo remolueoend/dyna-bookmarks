@@ -1,7 +1,7 @@
+import { AsyncFunctionHandler, createAsyncMiddleware } from "lib/redux-async"
 import { applyMiddleware, createStore } from "redux"
 import { createAction } from "redux-actions"
 import { reducer as reducerBuilder } from "../reducer-builder"
-import { AsyncFunctionHandler, createAsyncMiddleware } from "../redux-async"
 
 describe("redux-async", () => {
   it("does nothing if the dispatches action has no registered handler", () => {

@@ -4,7 +4,7 @@ import {
   FetchDocumentNode,
 } from "../../api/fetch-document"
 import { AsyncFunctionHandler } from "../../lib/redux-async"
-import { AppState } from "../../redux/state"
+import { AppState } from "../../root-reducer"
 
 export const buildNodeTree = (
   nodeMap: Map<string, FetchDocumentNode>,

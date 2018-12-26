@@ -20,8 +20,8 @@ function generateHtmlPlugins(items) {
   )
 }
 
-const getDistPath = (relPath = "") => path.resolve(`dist/${VENDOR}/${relPath}`)
-const getSrcPath = (relPath = "") => path.resolve(`./src/${relPath}`)
+const getDistPath = (relPath = "") => path.resolve(`dist/${VENDOR}`, relPath)
+const getSrcPath = (relPath = "") => path.resolve(`./src`, relPath)
 
 module.exports = {
   entry: {
@@ -33,6 +33,7 @@ module.exports = {
     filename: "[name].js",
   },
   resolve: {
+    modules: [getSrcPath(), "node_modules"],
     extensions: [".ts", ".tsx", ".js", ".json"],
   },
   devtool: "inline-source-map",

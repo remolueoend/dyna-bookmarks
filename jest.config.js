@@ -19,6 +19,7 @@ module.exports = {
     "<rootDir>/plopTemplates/",
   ],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
+  modulePaths: ["<rootDir>/src"],
   // set dynamically using `--coverage` flag when calling `yarn`:
   // collectCoverage: true,
   coverageThreshold: {

@@ -1,8 +1,8 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { lifecycle } from "recompose"
-import { AppState } from "../../redux/state"
-import { BookmarksNode, fetchBookmarks } from "../../state/bookmarks"
+import { AppState } from "root-reducer"
+import { BookmarksNode, fetchBookmarks } from "state/bookmarks"
 
 export interface HomeProps {
   loading: boolean

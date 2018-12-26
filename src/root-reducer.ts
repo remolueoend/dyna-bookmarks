@@ -1,6 +1,9 @@
 import { combineReducers } from "redux"
-import { AppState } from "../redux/state"
-import { bookmarksReducer } from "../state/bookmarks"
+import { bookmarksReducer, BookmarksState } from "./state/bookmarks"
+
+export interface AppState {
+  bookmarks: BookmarksState
+}
 
 export const rootReducer = combineReducers<AppState>({
   bookmarks: bookmarksReducer,

@@ -12,7 +12,9 @@
     "no-unused-variable": [true, "check-parameters"],
     // "trailing-comma": [true, { "multiline": "always", "singleline": "never" }],
     "semicolon": [true, "never"],
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "no-implicit-dependencies": false,
+    "no-submodule-imports": false
   },
   "linterOptions": {
     "exclude": ["**/*.js"]
