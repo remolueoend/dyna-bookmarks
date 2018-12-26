@@ -1,3 +1,5 @@
+import { Button } from "antd"
+import { ButtonProps } from "antd/lib/button"
 import * as React from "react"
 import { connect } from "react-redux"
 import { lifecycle } from "recompose"
@@ -12,6 +14,10 @@ export interface HomeProps {
   rootNode: BookmarksNode | undefined
   fetchBookmarks: () => void
 }
+
+const StyledButton = (styled(Button)`
+  width: 300px;
+` as any) as React.ComponentType<ButtonProps>
 
 const BookmarksNode: React.SFC<{ node: BookmarksNode }> = ({ node }) => (
   <li>
@@ -39,6 +45,7 @@ const Home: React.SFC<HomeProps> = ({
   className,
 }) => (
   <div className={className} style={style}>
+    <StyledButton type="primary">Star it!</StyledButton>
     {loading && !rootNode ? (
       <span>loading...</span>
     ) : !rootNode ? (

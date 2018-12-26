@@ -5,6 +5,8 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
 const WebextensionPlugin = require("webpack-webextension-plugin")
 const { name, version, description, homepage } = require("./package.json")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+const lessToJs = require("less-vars-to-js")
+const fs = require("fs")
 
 const VENDOR = process.env.WEB_EXT_VENDOR || "firefox"
 const babelOptions = {
@@ -25,6 +27,10 @@ function generateHtmlPlugins(items) {
 const getDistPath = (relPath = "") => path.resolve(`dist/${VENDOR}`, relPath)
 const getSrcPath = (relPath = "") => path.resolve(`./src`, relPath)
 
+const themeVariables = lessToJs(
+  fs.readFileSync(getSrcPath("theme/theme-vars.less"), "utf8"),
+)
+
 module.exports = {
   entry: {
     background: `${getSrcPath("pages")}/background/index.ts`,
@@ -36,7 +42,7 @@ module.exports = {
   },
   resolve: {
     modules: [getSrcPath(), "node_modules"],
-    extensions: [".ts", ".tsx", ".js", ".json"],
+    extensions: [".ts", ".tsx", ".js", ".json", ".less"],
   },
   optimization: {
     minimizer: [new UglifyJsPlugin()],
@@ -69,6 +75,20 @@ module.exports = {
           {
             loader: "babel-loader",
             options: babelOptions,
+          },
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+          {
+            loader: "less-loader",
+            options: {
+              javascriptEnabled: true,
+              modifyVars: themeVariables,
+            },
           },
         ],
       },
