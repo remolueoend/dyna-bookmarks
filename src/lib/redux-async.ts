@@ -1,14 +1,14 @@
 import { Dispatch, Middleware } from "redux"
 import { Action } from "redux-actions"
 
-export type AsyncFunctionHandler<TState, TPayload = any> = (
+export type AsyncActionHandler<TState, TPayload = any> = (
   action: Action<TPayload>,
   dispatch: Dispatch,
   getState: () => TState,
 ) => Promise<void>
 
 export interface AsyncActionMap<TState> {
-  [actionType: string]: AsyncFunctionHandler<TState, any>
+  [actionType: string]: AsyncActionHandler<TState, any>
 }
 
 export const createAsyncMiddleware = <TState>(

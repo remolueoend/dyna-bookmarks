@@ -1,4 +1,4 @@
-import { AsyncFunctionHandler, createAsyncMiddleware } from "lib/redux-async"
+import { AsyncActionHandler, createAsyncMiddleware } from "lib/redux-async"
 import { applyMiddleware, createStore } from "redux"
 import { createAction } from "redux-actions"
 import { reducer as reducerBuilder } from "../reducer-builder"
@@ -68,7 +68,7 @@ describe("redux-async", () => {
         result: payload!,
       }))
       .getReducer()
-    const asyncHandler: AsyncFunctionHandler<typeof initState, number> = async (
+    const asyncHandler: AsyncActionHandler<typeof initState, number> = async (
       { payload },
       dispatch,
     ) => {

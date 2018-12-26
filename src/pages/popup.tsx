@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom"
 import { Provider } from "react-redux"
 import { createUIStore } from "redux-webext"
 import { createGlobalStyle } from "styled-components"
-import Home from "../../components/home"
+import Home from "../components/home"
 
 const GlobalStyles = createGlobalStyle`
   body {

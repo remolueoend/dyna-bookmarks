@@ -9,9 +9,6 @@ const lessToJs = require("less-vars-to-js")
 const fs = require("fs")
 
 const VENDOR = process.env.WEB_EXT_VENDOR || "firefox"
-const babelOptions = {
-  presets: ["@babel/preset-react"],
-}
 
 function generateHtmlPlugins(items) {
   return items.map(
@@ -24,7 +21,7 @@ function generateHtmlPlugins(items) {
   )
 }
 
-const getDistPath = (relPath = "") => path.resolve(`dist/${VENDOR}`, relPath)
+const getDistPath = (relPath = "") => path.resolve(`./dist/${VENDOR}`, relPath)
 const getSrcPath = (relPath = "") => path.resolve(`./src`, relPath)
 
 const themeVariables = lessToJs(
@@ -33,8 +30,8 @@ const themeVariables = lessToJs(
 
 module.exports = {
   entry: {
-    background: `${getSrcPath("pages")}/background/index.ts`,
-    popup: `${getSrcPath("pages")}/popup/index.tsx`,
+    background: getSrcPath("pages/background.ts"),
+    popup: getSrcPath("pages/popup.tsx"),
   },
   output: {
     path: getDistPath(),
@@ -58,7 +55,6 @@ module.exports = {
         use: [
           {
             loader: "babel-loader",
-            options: babelOptions,
           },
           {
             loader: "ts-loader",
@@ -74,7 +70,6 @@ module.exports = {
         use: [
           {
             loader: "babel-loader",
-            options: babelOptions,
           },
         ],
       },
@@ -110,7 +105,7 @@ module.exports = {
       tsconfig: "./tsconfig.json",
     }),
     new WebextensionPlugin({
-      vendor: "firefox",
+      vendor: VENDOR,
       autoreload: false,
       manifestDefaults: {
         name,

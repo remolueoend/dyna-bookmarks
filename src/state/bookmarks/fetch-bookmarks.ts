@@ -3,7 +3,7 @@ import {
   fetchDocumentContent,
   FetchDocumentNode,
 } from "../../api/fetch-document"
-import { AsyncFunctionHandler } from "../../lib/redux-async"
+import { AsyncActionHandler } from "../../lib/redux-async"
 import { AppState } from "../../root-reducer"
 
 export const buildNodeTree = (
@@ -23,7 +23,7 @@ export const buildNodeTree = (
   }
 }
 
-export const fetchBookmarksHandler: AsyncFunctionHandler<AppState> = async (
+export const fetchBookmarksHandler: AsyncActionHandler<AppState> = async (
   _,
   dispatch,
 ) => {
