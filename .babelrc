@@ -12,6 +12,7 @@
     ]
   ],
   "plugins": [
+    "react-require",
     [
       "import",
       {

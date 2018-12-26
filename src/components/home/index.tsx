@@ -1,6 +1,5 @@
 import { Button } from "antd"
 import { ButtonProps } from "antd/lib/button"
-import * as React from "react"
 import { connect } from "react-redux"
 import { lifecycle } from "recompose"
 import { AppState } from "root-reducer"
@@ -38,7 +37,7 @@ const BookmarksRoot: React.SFC<{ nodes: BookmarksNode[] }> = ({ nodes }) => (
   </ul>
 )
 
-const Home: React.SFC<HomeProps> = ({
+export const Home: React.SFC<HomeProps> = ({
   loading,
   rootNode,
   style,
