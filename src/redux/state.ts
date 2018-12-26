@@ -1,7 +1,5 @@
-export interface CounterState {
-  counter: number
-}
+import { BookmarksState } from "../state/bookmarks"
+
 export interface AppState {
-  uiCounter: CounterState
-  backgroundCounter: CounterState
+  bookmarks: BookmarksState
 }

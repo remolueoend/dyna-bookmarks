@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore } from "redux"
 import { createAction } from "redux-actions"
-import { reducer as reducerBuilder } from "../../lib/reducer-builder"
+import { reducer as reducerBuilder } from "../reducer-builder"
 import { AsyncFunctionHandler, createAsyncMiddleware } from "../redux-async"
 
 describe("redux-async", () => {

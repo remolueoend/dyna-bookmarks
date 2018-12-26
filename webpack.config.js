@@ -1,12 +1,13 @@
-const path = require('path')
-// const CopyPlugin = require('copy-webpack-plugin')
-const HtmlPlugin = require('html-webpack-plugin')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-// const WebExtWebpackPlugin = require('web-ext-webpack-plugin')
+const path = require("path")
+const CopyPlugin = require("copy-webpack-plugin")
+const HtmlPlugin = require("html-webpack-plugin")
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin")
+const WebextensionPlugin = require("webpack-webextension-plugin")
+const { name, version, description, homepage } = require("./package.json")
 
-const PAGES_PATH = './src/pages'
+const VENDOR = process.env.WEB_EXT_VENDOR || "firefox"
 const babelOptions = {
-  presets: ['@babel/preset-react'],
+  presets: ["@babel/preset-react"],
 }
 
 function generateHtmlPlugins(items) {
@@ -19,20 +20,23 @@ function generateHtmlPlugins(items) {
   )
 }
 
+const getDistPath = (relPath = "") => path.resolve(`dist/${VENDOR}/${relPath}`)
+const getSrcPath = (relPath = "") => path.resolve(`./src/${relPath}`)
+
 module.exports = {
   entry: {
-    background: `${PAGES_PATH}/background/index.ts`,
-    popup: `${PAGES_PATH}/popup/index.tsx`,
+    background: `${getSrcPath("pages")}/background/index.ts`,
+    popup: `${getSrcPath("pages")}/popup/index.tsx`,
   },
   output: {
-    path: path.resolve('dist'),
-    filename: '[name].js',
+    path: getDistPath(),
+    filename: "[name].js",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json'],
+    extensions: [".ts", ".tsx", ".js", ".json"],
   },
-  devtool: 'source-map',
-  mode: process.env.NODE_ENV || 'development',
+  devtool: "inline-source-map",
+  mode: process.env.NODE_ENV || "development",
   cache: true,
   module: {
     rules: [
@@ -41,11 +45,11 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: babelOptions,
           },
           {
-            loader: 'ts-loader',
+            loader: "ts-loader",
             options: {
               transpileOnly: true,
             },
@@ -57,7 +61,7 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: babelOptions,
           },
         ],
@@ -67,18 +71,29 @@ module.exports = {
     ],
   },
   plugins: [
-    // new CopyPlugin([
-    // {
-    //    from: 'src',
-    //    to: path.resolve('dist'),
-    //    ignore: ['pages/**/*'],
-    //  },
-    // ]),
-    ...generateHtmlPlugins(['background', 'popup']),
+    new CopyPlugin([
+      {
+        from: "./assets",
+        to: getDistPath("assets"),
+      },
+      "LICENSE",
+      "README.md",
+    ]),
+    ...generateHtmlPlugins(["background", "popup"]),
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: './tsconfig.json',
+      tsconfig: "./tsconfig.json",
     }),
-    // new WebExtWebpackPlugin({ sourceDir: './dist' }),
+    new WebextensionPlugin({
+      vendor: "firefox",
+      autoreload: false,
+      manifestDefaults: {
+        name,
+        version,
+        description,
+        homepage_url: homepage,
+        manifest_version: 2,
+      },
+    }),
   ],
   // externals: {
   //   react: 'React',

@@ -1,7 +1,7 @@
 import { Dispatch, Middleware } from "redux"
 import { Action } from "redux-actions"
 
-export type AsyncFunctionHandler<TState, TPayload> = (
+export type AsyncFunctionHandler<TState, TPayload = any> = (
   action: Action<TPayload>,
   dispatch: Dispatch,
   getState: () => TState,

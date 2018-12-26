@@ -15,5 +15,15 @@ module.exports = {
     "jest.setup.js",
     ".babelrc",
     "__mocks__",
+    "plopfile",
+    "plop-templates",
+    "coverage",
   ],
+  sourceDir: "./dist/firefox",
+  build: {
+    overwriteDest: true,
+  },
+  run: {
+    startUrl: ["about:debugging"],
+  },
 }

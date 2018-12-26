@@ -1,8 +1,13 @@
 import { applyMiddleware, createStore } from "redux"
-import { rootReducer } from "../actions/root-reducer"
-import { createAsyncMiddleware } from "./redux-async"
+import { createAsyncMiddleware } from "../lib/redux-async"
+import { fetchBookmarks, fetchBookmarksHandler } from "../state/bookmarks"
+import { rootReducer } from "./root-reducer"
 
 export const store = createStore(
   rootReducer,
-  applyMiddleware(createAsyncMiddleware({})),
+  applyMiddleware(
+    createAsyncMiddleware({
+      [fetchBookmarks.toString()]: fetchBookmarksHandler,
+    }),
+  ),
 )

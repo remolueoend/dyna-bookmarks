@@ -1,35 +1,55 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import * as actions from "../../actions/ui-counter"
-import { AppState, CounterState } from "../../redux/state"
+import { lifecycle } from "recompose"
+import { AppState } from "../../redux/state"
+import { BookmarksNode, fetchBookmarks } from "../../state/bookmarks"
 
 export interface HomeProps {
-  backgroundCounter: CounterState
-  uiCounter: CounterState
-  increaseUICounter: (value: number) => void
-  decreaseUICounter: (value: number) => void
+  loading: boolean
+  rootNode: BookmarksNode | undefined
+  fetchBookmarks: () => void
 }
 
-const Home: React.SFC<HomeProps> = ({
-  backgroundCounter,
-  uiCounter,
-  increaseUICounter,
-  decreaseUICounter,
-}) => (
-  <div style={{ width: 200 }}>
-    <div>Background counter: {backgroundCounter.counter}</div>
-    <div>
-      UI counter: {uiCounter.counter}
-      <div>
-        <button onClick={() => decreaseUICounter(3)}>-</button>
-        <span />
-        <button onClick={() => increaseUICounter(3)}>+</button>
-      </div>
-    </div>
-  </div>
+const BookmarksNode: React.SFC<{ node: BookmarksNode }> = ({ node }) => (
+  <li>
+    <span>{node.content}</span>
+    <ul>
+      {(node.children || []).map(child => (
+        <BookmarksNode key={child.id} node={child} />
+      ))}
+    </ul>
+  </li>
 )
 
-export default connect(
-  (state: AppState) => state,
-  actions,
-)(Home)
+const BookmarksRoot: React.SFC<{ nodes: BookmarksNode[] }> = ({ nodes }) => (
+  <ul>
+    {nodes.map(node => (
+      <BookmarksNode key={node.id} node={node} />
+    ))}
+  </ul>
+)
+
+const Home: React.SFC<HomeProps> = ({ loading, rootNode }) =>
+  loading && !rootNode ? (
+    <span>loading...</span>
+  ) : !rootNode ? (
+    <span>no bookmarks...</span>
+  ) : (
+    <BookmarksRoot nodes={rootNode.children || []} />
+  )
+
+const HomeWithLifecicle = lifecycle<HomeProps, never>({
+  componentDidMount() {
+    this.props.fetchBookmarks()
+  },
+})(Home)
+
+const HomeWithState = connect(
+  (state: AppState) => ({
+    rootNode: state.bookmarks.root,
+    loading: state.bookmarks.loading,
+  }),
+  { fetchBookmarks },
+)(HomeWithLifecicle)
+
+export default HomeWithState

@@ -10,7 +10,7 @@
     "jsx-no-lambda": false,
     "jsx-no-multiline-js": false,
     "no-unused-variable": [true, "check-parameters"],
-    "trailing-comma": [true, { "multiline": "always", "singleline": "never" }],
+    // "trailing-comma": [true, { "multiline": "always", "singleline": "never" }],
     "semicolon": [true, "never"],
     "object-literal-sort-keys": false
   },
