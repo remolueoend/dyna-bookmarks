@@ -1,14 +1,12 @@
+import { NodeID, TreeNode } from "lib/trees"
 import { createAction } from "redux-actions"
-import { NodeID } from "../../api/types"
 import { reducer } from "../../lib/reducer-builder"
 
 export { fetchBookmarksHandler } from "./fetch-bookmarks"
 
-export interface BookmarksNode {
-  children?: BookmarksNode[]
+export type BookmarksNode = TreeNode<{
   content: string
-  id: NodeID
-}
+}>
 
 export interface BookmarksState {
   root: BookmarksNode | undefined

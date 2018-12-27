@@ -20,7 +20,7 @@ const StyledButton = (styled(Button)`
 
 const BookmarksNode: React.SFC<{ node: BookmarksNode }> = ({ node }) => (
   <li>
-    <span>{node.content}</span>
+    <span>{node.data.content}</span>
     <ul>
       {(node.children || []).map(child => (
         <BookmarksNode key={child.id} node={child} />

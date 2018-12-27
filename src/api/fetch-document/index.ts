@@ -1,13 +1,11 @@
+import { NodeID, RawNode } from "lib/trees"
 import { apiRequest } from "../request"
-import { NodeID } from "../types"
 
-export interface FetchDocumentNode {
-  id: NodeID
+export type FetchDocumentNode = RawNode<{
   content: string
   note: string
   checked: boolean
-  children?: NodeID[]
-}
+}>
 
 export interface FetchDocumentContent {
   _code: "Ok"

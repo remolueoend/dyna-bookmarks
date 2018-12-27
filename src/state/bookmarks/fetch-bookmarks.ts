@@ -1,3 +1,4 @@
+import { buildNodeTree, NodeID, RawNode, TreeNode } from "lib/trees"
 import { BookmarksNode, updateBookmarks } from "."
 import {
   fetchDocumentContent,
@@ -5,23 +6,6 @@ import {
 } from "../../api/fetch-document"
 import { AsyncActionHandler } from "../../lib/redux-async"
 import { AppState } from "../../root-reducer"
-
-export const buildNodeTree = (
-  nodeMap: Map<string, FetchDocumentNode>,
-  nodeId: string,
-): BookmarksNode => {
-  const fetchedNode = nodeMap.get(nodeId)
-  if (!fetchedNode) {
-    throw new Error(`Could not find a node with id ${nodeId}`)
-  }
-  return {
-    id: fetchedNode.id,
-    content: fetchedNode.content,
-    children: (fetchedNode.children || []).map(childId =>
-      buildNodeTree(nodeMap, childId),
-    ),
-  }
-}
 
 export const fetchBookmarksHandler: AsyncActionHandler<AppState> = async (
   _,
@@ -34,10 +18,12 @@ export const fetchBookmarksHandler: AsyncActionHandler<AppState> = async (
 
   const nodeMap = new Map(
     documentContent.nodes.map(
-      node => [node.id, node] as [string, FetchDocumentNode],
+      node => [node.id, node] as [NodeID, FetchDocumentNode],
     ),
   )
-  const rootNode = buildNodeTree(nodeMap, "root")
+  const rootNode = buildNodeTree(nodeMap, "root", node => ({
+    content: node.content,
+  }))
 
   dispatch(updateBookmarks(rootNode))
 }
