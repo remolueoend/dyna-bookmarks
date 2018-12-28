@@ -67,7 +67,7 @@ const HomeWithLifecicle = lifecycle<HomeProps, never>({
 
 const HomeWithState = connect(
   (state: AppState) => ({
-    rootNode: state.bookmarks.root,
+    rootNode: state.bookmarks.rootNode,
     loading: state.bookmarks.loading,
   }),
   { fetchBookmarks },

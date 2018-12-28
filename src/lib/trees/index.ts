@@ -18,33 +18,53 @@ export interface TreeNode<TData> {
 
 export type FlatNodeMap<TData> = Map<NodeID, TreeNode<TData>>
 
-/**
- * Builds a tree from the given flat node list and returns a new flat list of extended nodes.
- *
- * @param nodeMap flat node list
- * @param nodeId The node ID of the root
- * @param getSearchableContent: function accepting a node and returning a string array
- * of content included when searched through the tree
- * @param mapData function accepting a node and returning the new node data
- */
-export const buildNodeTree = <TRaw, TData>(
-  nodeMap: Map<NodeID, RawNode<TRaw>>,
+export const resolveNode = <TRaw, TData>(
   nodeId: NodeID,
+  path: string[],
+  rawNodeMap: Map<NodeID, RawNode<TRaw>>,
+  nodeMap: FlatNodeMap<TData>,
   mapData: (node: RawNode<TRaw>) => TData,
 ): TreeNode<TData> => {
-  const rootNode = nodeMap.get(nodeId)
-  if (!rootNode) {
+  const rawNode = rawNodeMap.get(nodeId)
+  if (!rawNode) {
     throw new Error(
-      `[lib/trees/buildNodeTree]: Could not find a node with id ${nodeId}`,
+      `[lib/trees/resolveNode]: Cannot find node with NodeID ${nodeId}`,
     )
   }
+  const childNodes = (rawNode.children || []).map(childId =>
+    nodeMap.has(childId)
+      ? nodeMap.get(childId)!
+      : resolveNode(
+          childId,
+          [...path, rawNode.text],
+          rawNodeMap,
+          nodeMap,
+          mapData,
+        ),
+  )
+
+  const node = {
+    id: rawNode.id,
+    children: childNodes,
+    path,
+    data: mapData(rawNode),
+  }
+
+  nodeMap.set(node.id, node)
+
+  return node
+}
+
+export const resolveNodes = <TRaw, TData>(
+  nodeMap: Map<NodeID, RawNode<TRaw>>,
+  mapData: (node: RawNode<TRaw>) => TData,
+) => {
+  const nodes = new Map<NodeID, TreeNode<TData>>()
+  const rootNode = resolveNode("root", [], nodeMap, nodes, mapData)
+
   return {
-    id: rootNode.id,
-    children: (rootNode.children || []).map(childId =>
-      buildNodeTree(nodeMap, childId, mapData),
-    ),
-    path: [],
-    data: mapData(rootNode),
+    nodeList: Array.from(nodes.values()),
+    rootNode,
   }
 }
 

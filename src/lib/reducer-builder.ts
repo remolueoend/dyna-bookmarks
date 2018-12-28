@@ -3,6 +3,7 @@ import {
   Action,
   ActionFunction0,
   ActionFunction1,
+  ActionFunction2,
   ActionFunctionAny,
   BaseAction,
   handleActions,
@@ -21,6 +22,10 @@ export class ReducerBuilder<TState> {
   ): ReducerBuilder<TState>
   public addHandler<TPayload, T1>(
     action: ActionFunction1<T1, Action<TPayload>>,
+    handler: (state: TState, action: Action<TPayload>) => TState,
+  ): ReducerBuilder<TState>
+  public addHandler<TPayload, T1, T2>(
+    action: ActionFunction2<T1, T2, Action<TPayload>>,
     handler: (state: TState, action: Action<TPayload>) => TState,
   ): ReducerBuilder<TState>
 

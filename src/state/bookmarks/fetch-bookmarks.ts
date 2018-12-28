@@ -1,4 +1,4 @@
-import { buildNodeTree, NodeID, RawNode, TreeNode } from "lib/trees"
+import { NodeID, RawNode, resolveNodes, TreeNode } from "lib/trees"
 import { BookmarksNode, updateBookmarks } from "."
 import {
   fetchDocumentContent,
@@ -21,9 +21,9 @@ export const fetchBookmarksHandler: AsyncActionHandler<AppState> = async (
       node => [node.id, node] as [NodeID, FetchDocumentNode],
     ),
   )
-  const rootNode = buildNodeTree(nodeMap, "root", node => ({
+  const { rootNode, nodeList } = resolveNodes(nodeMap, node => ({
     content: node.content,
   }))
 
-  dispatch(updateBookmarks(rootNode))
+  dispatch(updateBookmarks(rootNode, nodeList))
 }

@@ -1,4 +1,4 @@
-import { NodeID, TreeNode } from "lib/trees"
+import { FlatNodeMap, NodeID, TreeNode } from "lib/trees"
 import { createAction } from "redux-actions"
 import { reducer } from "../../lib/reducer-builder"
 
@@ -9,20 +9,25 @@ export type BookmarksNode = TreeNode<{
 }>
 
 export interface BookmarksState {
-  root: BookmarksNode | undefined
+  rootNode: BookmarksNode | undefined
+  nodeMap: BookmarksNode[] | undefined
   loading: boolean
   error?: string
 }
 
 export const initialState: BookmarksState = {
   loading: false,
-  root: undefined,
+  rootNode: undefined,
+  nodeMap: undefined,
 }
 
 export const fetchBookmarks = createAction("fetch-bookmarks")
 export const updateBookmarks = createAction(
   "update-bookmarks",
-  (rootNode: BookmarksNode) => rootNode,
+  (rootNode: BookmarksNode, nodeList: BookmarksNode[]) => ({
+    rootNode,
+    nodeList,
+  }),
 )
 export const setBookmarksError = createAction(
   "set-bookmarks-error",
@@ -38,7 +43,8 @@ export const bookmarksReducer = reducer(initialState)
   .addHandler(updateBookmarks, (state, { payload }) => ({
     ...state,
     loading: false,
-    root: payload!,
+    rootNode: payload!.rootNode,
+    nodeMap: payload!.nodeList,
     error: undefined,
   }))
   .addHandler(setBookmarksError, (state, { payload }) => ({
