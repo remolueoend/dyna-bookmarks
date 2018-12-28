@@ -12,8 +12,8 @@ import {
 
 export class ReducerBuilder<TState> {
   constructor(
-    protected initialState: TState,
-    protected reducerMap: ReducerMap<TState, any> = {},
+    protected readonly initialState: TState,
+    protected readonly reducerMap: ReducerMap<TState, any> = {},
   ) {}
 
   public addHandler(
@@ -36,16 +36,6 @@ export class ReducerBuilder<TState> {
     return new ReducerBuilder<TState>(this.initialState, {
       ...this.reducerMap,
       [action.toString()]: handler,
-    })
-  }
-
-  public addHandlerOld<TPayload>(
-    type: string,
-    handler: (state: TState, action: Action<TPayload>) => TState,
-  ) {
-    return new ReducerBuilder<TState>(this.initialState, {
-      ...this.reducerMap,
-      [type]: handler,
     })
   }
 
