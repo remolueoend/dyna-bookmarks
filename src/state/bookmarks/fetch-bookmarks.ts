@@ -1,5 +1,5 @@
-import { NodeID, RawNode, resolveNodes, TreeNode } from "lib/trees"
-import { BookmarksNode, updateBookmarks } from "."
+import { NodeID, resolveNodes } from "lib/trees"
+import { updateBookmarks } from "."
 import {
   fetchDocumentContent,
   FetchDocumentNode,

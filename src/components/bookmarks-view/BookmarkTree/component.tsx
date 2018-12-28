@@ -10,4 +10,4 @@ const BookmarkTreeBase = styled.div``
 export const BookmarkTree: React.SFC<BookmarkTreeProps> = ({
   style,
   className,
-}) => <BookmarkTreeBase />
+}) => <BookmarkTreeBase style={style} className={className} />

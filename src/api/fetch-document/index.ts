@@ -1,4 +1,4 @@
-import { NodeID, RawNode } from "lib/trees"
+import { RawNode } from "lib/trees"
 import { apiRequest } from "../request"
 
 export type FetchDocumentNode = RawNode<{

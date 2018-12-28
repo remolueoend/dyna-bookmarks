@@ -1,6 +1,5 @@
 import { Input } from "antd"
 import { SearchProps } from "antd/es/input/Search"
-import { Omit } from "lib/types"
 import styled from "styled-components"
 
 const SearchInput = Input.Search

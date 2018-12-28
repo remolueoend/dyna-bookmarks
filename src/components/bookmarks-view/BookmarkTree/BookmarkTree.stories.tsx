@@ -1,7 +1,6 @@
 import { storiesOf } from "@storybook/react"
 import { BookmarkTree } from "./component"
 
-storiesOf("core/bookmarks-tree/BookmarkTree", module).add(
-  "default view",
-  () => <BookmarkTree />,
-)
+storiesOf("bookmarks-view/BookmarkTree", module).add("default view", () => (
+  <BookmarkTree />
+))

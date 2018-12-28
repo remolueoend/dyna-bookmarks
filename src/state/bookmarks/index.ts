@@ -1,4 +1,4 @@
-import { FlatNodeMap, NodeID, TreeNode } from "lib/trees"
+import { TreeNode } from "lib/trees"
 import { createAction } from "redux-actions"
 import { reducer } from "../../lib/reducer-builder"
 

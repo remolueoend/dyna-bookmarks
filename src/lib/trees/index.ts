@@ -1,5 +1,4 @@
 import { filter } from "fuzzy"
-import { flatten, split } from "ramda"
 
 export type NodeID = string
 

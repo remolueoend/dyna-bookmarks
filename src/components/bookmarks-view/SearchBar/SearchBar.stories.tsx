@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react"
 import { withState } from "recompose"
 import { SearchBar } from "./component"
 
-storiesOf("core/bookmarks-tree/SearchBar", module).add("default view", () => {
+storiesOf("bookmarks-view/SearchBar", module).add("default view", () => {
   const onChangeAction = action("onChange")
   const ValueState = withState("value", "setValue", "")(
     ({ setValue, value }) => (
