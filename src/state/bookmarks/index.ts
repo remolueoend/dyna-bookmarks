@@ -1,40 +1,44 @@
 import { TreeNode } from "lib/trees"
+import { combineReducers } from "redux"
 import { createAction } from "redux-actions"
 import { reducer } from "../../lib/reducer-builder"
+import { bookmarksSearchReducer, BookmarksSearchState } from "./search"
+import { bookmarksTreeReducer, BookmarksTreeState } from "./tree"
 
 export { fetchBookmarksHandler } from "./fetch-bookmarks"
 
 export type BookmarksNode = TreeNode<{
-  content: string
+  label: string
+  href?: string
 }>
 
-export interface BookmarksState {
+export interface BookmarksDataState {
   rootNode: BookmarksNode | undefined
   nodeMap: BookmarksNode[] | undefined
   loading: boolean
   error?: string
 }
 
-export const initialState: BookmarksState = {
+export const initialDataState: BookmarksDataState = {
   loading: false,
   rootNode: undefined,
   nodeMap: undefined,
 }
 
-export const fetchBookmarks = createAction("fetch-bookmarks")
+export const fetchBookmarks = createAction("bookmarks/fetch-bookmarks")
 export const updateBookmarks = createAction(
-  "update-bookmarks",
+  "bookmarks/update-bookmarks",
   (rootNode: BookmarksNode, nodeList: BookmarksNode[]) => ({
     rootNode,
     nodeList,
   }),
 )
 export const setBookmarksError = createAction(
-  "set-bookmarks-error",
+  "bookmarks/set-bookmarks-error",
   (error: string) => error,
 )
 
-export const bookmarksReducer = reducer(initialState)
+export const bookmarksDataReducer = reducer(initialDataState)
   .addHandler(fetchBookmarks, state => ({
     ...state,
     loading: true,
@@ -54,3 +58,15 @@ export const bookmarksReducer = reducer(initialState)
     error: payload!,
   }))
   .getReducer()
+
+export interface BookmarksState {
+  data: BookmarksDataState
+  tree: BookmarksTreeState
+  search: BookmarksSearchState
+}
+
+export const bookmarksReducer = combineReducers<BookmarksState>({
+  data: bookmarksDataReducer,
+  search: bookmarksSearchReducer,
+  tree: bookmarksTreeReducer,
+})

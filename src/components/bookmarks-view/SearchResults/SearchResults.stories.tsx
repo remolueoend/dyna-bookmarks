@@ -8,7 +8,7 @@ const resultNodes: BookmarksNode[] = [
     path: ["project A", "development"],
     children: [],
     data: {
-      content: "Gitlab",
+      label: "Gitlab",
     },
   },
   {
@@ -16,7 +16,7 @@ const resultNodes: BookmarksNode[] = [
     path: ["learning", "school", "coding"],
     children: [],
     data: {
-      content: "Github",
+      label: "Github",
     },
   },
   {
@@ -24,7 +24,7 @@ const resultNodes: BookmarksNode[] = [
     path: ["coding", "gitlab"],
     children: [],
     data: {
-      content: "Project B",
+      label: "Project B",
     },
   },
 ]

@@ -20,7 +20,7 @@ const StyledButton = (styled(Button)`
 
 const BookmarksNode: React.SFC<{ node: BookmarksNode }> = ({ node }) => (
   <li>
-    <span>{node.data.content}</span>
+    <span>{node.data.label}</span>
     <ul>
       {(node.children || []).map(child => (
         <BookmarksNode key={child.id} node={child} />
@@ -67,8 +67,8 @@ const HomeWithLifecicle = lifecycle<HomeProps, never>({
 
 const HomeWithState = connect(
   (state: AppState) => ({
-    rootNode: state.bookmarks.rootNode,
-    loading: state.bookmarks.loading,
+    rootNode: state.bookmarks.data.rootNode,
+    loading: state.bookmarks.data.loading,
   }),
   { fetchBookmarks },
 )(HomeWithLifecicle)

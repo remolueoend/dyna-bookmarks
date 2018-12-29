@@ -4,7 +4,9 @@ import { ThemedStyledFunction } from "styled-components"
 const defaultThemeVars = require("!../.config/less-variables-loader!antd/lib/style/themes/default.less")
 const customThemeVars = require("!../.config/less-variables-loader!./theme-vars.less")
 
-export const getThemeVar = (varName: string) => {
+type AvailableVars = "background-color-light" | "primary-color"
+
+export const getThemeVar = (varName: AvailableVars) => {
   const value = (customThemeVars[varName] ||
     defaultThemeVars[varName]) as string
   if (!value) {

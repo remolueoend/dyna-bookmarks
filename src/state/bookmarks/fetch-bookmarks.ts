@@ -22,7 +22,7 @@ export const fetchBookmarksHandler: AsyncActionHandler<AppState> = async (
     ),
   )
   const { rootNode, nodeList } = resolveNodes(nodeMap, node => ({
-    content: node.content,
+    label: node.content,
   }))
 
   dispatch(updateBookmarks(rootNode, nodeList))

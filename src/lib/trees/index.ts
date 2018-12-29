@@ -1,4 +1,6 @@
 import { filter } from "fuzzy"
+import { Omit } from "lib/types"
+import { flatten } from "ramda"
 
 export type NodeID = string
 
@@ -13,6 +15,9 @@ export interface TreeNode<TData> {
   children?: Array<TreeNode<TData>>
   data: TData
   path: string[]
+}
+export type TreeNodeWithChildren<TData> = Omit<TreeNode<TData>, "children"> & {
+  children: Array<TreeNode<TData>>
 }
 
 export type FlatNodeMap<TData> = Map<NodeID, TreeNode<TData>>
@@ -83,3 +88,20 @@ export const searchTree = <TNodeData>(
     extract: node => `${node.path.join("/")}/${getSearchContent(node)}`,
   }).map(result => result.original)
 }
+
+/**
+ * Returns if the given node has at least one child.
+ *
+ * @param node the parent node
+ */
+export const hasChildren = <TData>(
+  node: TreeNode<TData>,
+): node is TreeNodeWithChildren<TData> =>
+  !!node.children && !!node.children.length
+
+export const flattenTree = <TData>(
+  rootNode: TreeNode<TData>,
+): Array<TreeNode<TData>> => [
+  rootNode,
+  ...flatten((rootNode.children || []).map(child => flattenTree(child))),
+]

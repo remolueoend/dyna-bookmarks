@@ -44,7 +44,7 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
       renderItem={(node: BookmarksNode, index: number) => (
         <StyledListItem selected={index === selectedIndex}>
           <List.Item.Meta
-            title={node.data.content}
+            title={node.data.label}
             description={node.path.join("/")}
           />
         </StyledListItem>
