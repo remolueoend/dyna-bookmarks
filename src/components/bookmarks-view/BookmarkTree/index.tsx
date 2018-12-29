@@ -1,1 +1,1 @@
-export { BookmarkTree } from "./component"
+export { BookmarkTreeContainer as BookmarkTree } from "./container"

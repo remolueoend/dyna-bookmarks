@@ -1,1 +1,1 @@
-export { SearchResults } from "./component"
+export { SearchResultsContainer as SearchResults } from "./container"

@@ -92,6 +92,7 @@
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
     "redux-webext": "^1.1.2",
+    "reselect": "^4.0.0",
     "styled-components": "^4.1.3"
   },
   "husky": {

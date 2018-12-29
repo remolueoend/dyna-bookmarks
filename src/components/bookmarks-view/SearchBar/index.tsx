@@ -1,1 +1,1 @@
-export { SearchBar } from "./component"
+export { SearchBarContainer as SearchBar } from "./container"

@@ -1,4 +1,3 @@
-import { FetchDocumentNode } from "api/fetch-document/index"
 import { internet, lorem, random, seed } from "faker"
 import { flattenTree } from "lib/trees"
 import { times } from "ramda"

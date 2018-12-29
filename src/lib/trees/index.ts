@@ -76,15 +76,15 @@ export const resolveNodes = <TRaw, TData>(
  * Returs a subset of the given node map as an array of nodes, containing
  * all nodes matching the given search text.
  *
- * @param nodeMap node map to search through.
+ * @param nodeList node map to search through.
  * @param searchText text to search for.
  */
 export const searchTree = <TNodeData>(
-  nodeMap: FlatNodeMap<TNodeData>,
+  nodeList: Array<TreeNode<TNodeData>>,
   searchText: string,
   getSearchContent: (node: TreeNode<TNodeData>) => string[],
 ) => {
-  return filter(searchText, Array.from(nodeMap.values()), {
+  return filter(searchText, nodeList, {
     extract: node => `${node.path.join("/")}/${getSearchContent(node)}`,
   }).map(result => result.original)
 }

@@ -7,7 +7,7 @@ import { getThemeVar, styledWithProps } from "theme"
 export interface BookmarkTreeProps {
   style?: {}
   className?: string
-  rootNode: BookmarksNode
+  rootNode: BookmarksNode | undefined
   expandedNodes: NodeID[]
   selectedNode?: NodeID
 }
@@ -20,19 +20,22 @@ export const BookmarkTree: React.SFC<BookmarkTreeProps> = ({
   rootNode,
   expandedNodes,
   selectedNode,
-}) => (
-  <BookmarkTreeBase style={style} className={className}>
-    {rootNode.children &&
-      rootNode.children.map(child => (
-        <TreeNode
-          key={child.id}
-          node={child}
-          expandedNodes={expandedNodes}
-          selectedNode={selectedNode}
-        />
-      ))}
-  </BookmarkTreeBase>
-)
+}) =>
+  !rootNode ? (
+    <span>No data</span>
+  ) : (
+    <BookmarkTreeBase style={style} className={className}>
+      {rootNode.children &&
+        rootNode.children.map(child => (
+          <TreeNode
+            key={child.id}
+            node={child}
+            expandedNodes={expandedNodes}
+            selectedNode={selectedNode}
+          />
+        ))}
+    </BookmarkTreeBase>
+  )
 
 const NodeWrapper = styled.div`
   margin: 1px;

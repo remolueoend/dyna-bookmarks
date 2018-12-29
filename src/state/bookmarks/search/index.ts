@@ -1,9 +1,8 @@
 import { reducer } from "lib/reducer-builder"
-import { createAction } from "redux-actions"
-import { BookmarksNode } from ".."
 
 export interface BookmarksSearchState {
-  selectedResult?: BookmarksNode
+  searchTerm?: string
+  selectedIndex?: number
 }
 
 export const initState: BookmarksSearchState = {}
