@@ -4,10 +4,10 @@ import styled from "styled-components"
 
 const SearchInput = Input.Search
 
-export interface SearchBarProps
-  extends Pick<Required<SearchProps>, "onSearch" | "onChange" | "value"> {
+export interface SearchBarProps extends Pick<Required<SearchProps>, "value"> {
   style?: {}
   className?: string
+  onChange: (term: string) => void
 }
 
 const SearchBarBase = styled.div``
@@ -15,11 +15,14 @@ const SearchBarBase = styled.div``
 export const SearchBar: React.SFC<SearchBarProps> = ({
   style,
   className,
-  onSearch,
   onChange,
   value,
 }) => (
   <SearchBarBase className={className} style={style}>
-    <SearchInput onSearch={onSearch} onChange={onChange} value={value} />
+    <SearchInput
+      onChange={e => onChange(e.target.value)}
+      value={value}
+      placeholder="search bookmarks"
+    />
   </SearchBarBase>
 )

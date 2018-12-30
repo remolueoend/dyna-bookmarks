@@ -38,6 +38,9 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
 }) => (
   <SearchResultsBase className={className} style={style}>
     <List
+      locale={{
+        emptyText: "no bookmarks found",
+      }}
       bordered
       size={"small"}
       dataSource={results}

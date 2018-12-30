@@ -85,7 +85,8 @@ export const searchTree = <TNodeData>(
   getSearchContent: (node: TreeNode<TNodeData>) => string[],
 ) => {
   return filter(searchText, nodeList, {
-    extract: node => `${node.path.join("/")}/${getSearchContent(node)}`,
+    extract: node =>
+      `${node.path.join("/")}/${getSearchContent(node).join(" ")}`,
   }).map(result => result.original)
 }
 

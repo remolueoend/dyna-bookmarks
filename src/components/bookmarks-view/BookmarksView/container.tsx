@@ -4,7 +4,7 @@ import { BookmarksView } from "./component"
 
 export const BookmarksViewContainer = connect(
   (state: AppState) => ({
-    searchTerm: state.bookmarks.search.searchTerm,
+    hasSearchTerm: !!state.bookmarks.search.searchTerm,
   }),
   {},
 )(BookmarksView)

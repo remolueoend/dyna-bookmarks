@@ -17,7 +17,6 @@ const searchResultsSelector = createSelector<
     !searchTerm || !nodeList
       ? []
       : searchTree(nodeList || [], searchTerm, node => [
-          ...node.path,
           node.data.label,
           ...(node.data.href ? [node.data.href] : []),
         ]),

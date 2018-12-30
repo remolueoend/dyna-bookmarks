@@ -17,7 +17,7 @@ export const BookmarksView: React.SFC<BookmarksViewProps> = ({
   hasSearchTerm,
 }) => (
   <BookmarksViewBase className={className} style={style}>
-    <SearchBar onChange={() => undefined} onSearch={() => undefined} />
+    <SearchBar />
     {hasSearchTerm ? <SearchResults /> : <BookmarkTree />}
   </BookmarksViewBase>
 )

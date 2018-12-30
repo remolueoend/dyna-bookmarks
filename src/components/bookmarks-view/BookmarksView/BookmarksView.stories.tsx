@@ -3,6 +3,7 @@ import { withState } from "tests/decorators"
 import { nodeList, rootNode } from "tests/fixtures"
 import { appState } from "tests/state-builder"
 import { BookmarksView } from "./component"
+import { BookmarksViewContainer } from "./container"
 
 storiesOf("bookmarks-view/BookmarksView", module)
   .addDecorator(withState(appState.withBookmarks(nodeList, rootNode)))
@@ -15,3 +16,4 @@ storiesOf("bookmarks-view/BookmarksView", module)
     ),
   )
   .add("with search term", () => <BookmarksView hasSearchTerm />)
+  .add("container", () => <BookmarksViewContainer />)

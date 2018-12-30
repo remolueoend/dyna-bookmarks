@@ -2,7 +2,7 @@
   "icons": {
     "48": "assets/border-48.png"
   },
-  "permissions": ["activeTab", "<all_urls>"],
+  "permissions": ["bookmarks", "activeTab", "<all_urls>"],
 
   "browser_action": {
     "default_icon": "assets/border-48.png",

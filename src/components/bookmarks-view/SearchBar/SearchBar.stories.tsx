@@ -8,10 +8,9 @@ storiesOf("bookmarks-view/SearchBar", module).add("default view", () => {
   const ValueState = withState("value", "setValue", "")(
     ({ setValue, value }) => (
       <SearchBar
-        onSearch={action("onSearch")}
         onChange={e => {
           onChangeAction(...arguments)
-          setValue(e.target.value)
+          setValue(e)
         }}
         value={value}
       />
