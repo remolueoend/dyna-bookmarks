@@ -6,8 +6,8 @@ export interface BookmarksTreeState {
   selectedNode?: NodeID
 }
 
-export const initState: BookmarksTreeState = {
+export const initTreeState: BookmarksTreeState = {
   expandedNodes: [],
 }
 
-export const bookmarksTreeReducer = reducer(initState).getReducer()
+export const bookmarksTreeReducer = reducer(initTreeState).getReducer()

@@ -14,7 +14,7 @@ export type BookmarksNode = TreeNode<{
 
 export interface BookmarksDataState {
   rootNode: BookmarksNode | undefined
-  nodeMap: BookmarksNode[] | undefined
+  nodeList: BookmarksNode[] | undefined
   loading: boolean
   error?: string
 }
@@ -22,7 +22,7 @@ export interface BookmarksDataState {
 export const initialDataState: BookmarksDataState = {
   loading: false,
   rootNode: undefined,
-  nodeMap: undefined,
+  nodeList: undefined,
 }
 
 export const fetchBookmarks = createAction("bookmarks/fetch-bookmarks")

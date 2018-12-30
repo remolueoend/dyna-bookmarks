@@ -6,7 +6,7 @@ import { SearchResults } from "../SearchResults"
 export interface BookmarksViewProps {
   style?: {}
   className?: string
-  searchTerm?: string
+  hasSearchTerm?: boolean
 }
 
 const BookmarksViewBase = styled.div``
@@ -14,10 +14,10 @@ const BookmarksViewBase = styled.div``
 export const BookmarksView: React.SFC<BookmarksViewProps> = ({
   style,
   className,
-  searchTerm,
+  hasSearchTerm,
 }) => (
   <BookmarksViewBase className={className} style={style}>
     <SearchBar onChange={() => undefined} onSearch={() => undefined} />
-    {searchTerm ? <SearchResults /> : <BookmarkTree />}
+    {hasSearchTerm ? <SearchResults /> : <BookmarkTree />}
   </BookmarksViewBase>
 )

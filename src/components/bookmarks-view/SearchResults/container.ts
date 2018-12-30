@@ -12,7 +12,7 @@ const searchResultsSelector = createSelector<
   BookmarksNode[]
 >(
   state => state.bookmarks.search.searchTerm,
-  state => state.bookmarks.data.nodeMap,
+  state => state.bookmarks.data.nodeList,
   (searchTerm, nodeList) =>
     !searchTerm || !nodeList
       ? []

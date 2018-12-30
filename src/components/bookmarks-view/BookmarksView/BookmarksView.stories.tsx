@@ -1,10 +1,17 @@
 import { storiesOf } from "@storybook/react"
-import { Provider } from "react-redux"
-import { createStore } from "redux-store"
+import { withState } from "tests/decorators"
+import { nodeList, rootNode } from "tests/fixtures"
+import { appState } from "tests/state-builder"
 import { BookmarksView } from "./component"
 
-storiesOf("bookmarks-view/BookmarksView", module).add("default view", () => (
-  <Provider store={createStore()}>
-    <BookmarksView />
-  </Provider>
-))
+storiesOf("bookmarks-view/BookmarksView", module)
+  .addDecorator(withState(appState.withBookmarks(nodeList, rootNode)))
+  .add("default view", () => <BookmarksView />)
+
+storiesOf("bookmarks-view/BookmarksView", module)
+  .addDecorator(
+    withState(
+      appState.withBookmarks(nodeList, rootNode).withSearchTerm("quia et quis"),
+    ),
+  )
+  .add("with search term", () => <BookmarksView hasSearchTerm />)

@@ -5,6 +5,6 @@ export interface BookmarksSearchState {
   selectedIndex?: number
 }
 
-export const initState: BookmarksSearchState = {}
+export const initSearchState: BookmarksSearchState = {}
 
-export const bookmarksSearchReducer = reducer(initState).getReducer()
+export const bookmarksSearchReducer = reducer(initSearchState).getReducer()
