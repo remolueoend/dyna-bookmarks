@@ -1,14 +1,41 @@
 import { Dispatch, Middleware } from "redux"
-import { Action } from "redux-actions"
+import {
+  Action,
+  ActionFunction0,
+  ActionFunction1,
+  ActionFunctionAny,
+  BaseAction,
+} from "redux-actions"
+import { AppState } from "root-reducer"
 
-export type AsyncActionHandler<TState, TPayload = any> = (
+export type AsyncActionHandler<TState> = (
+  action: BaseAction,
+  dispatch: Dispatch,
+  getState: () => TState,
+) => Promise<void>
+export type AsyncActionHandlerWithPayload<TState, TPayload> = (
   action: Action<TPayload>,
   dispatch: Dispatch,
   getState: () => TState,
 ) => Promise<void>
 
+export function createAsyncHandlerFor(
+  _: ActionFunction0<BaseAction>,
+  handler: AsyncActionHandler<AppState>,
+): AsyncActionHandler<AppState>
+export function createAsyncHandlerFor<TPaylaod, T1>(
+  _: ActionFunction1<T1, Action<TPaylaod>>,
+  handler: AsyncActionHandlerWithPayload<AppState, TPaylaod>,
+): AsyncActionHandlerWithPayload<AppState, TPaylaod>
+export function createAsyncHandlerFor<TPaylaod>(
+  _: ActionFunctionAny<BaseAction>,
+  handler: AsyncActionHandlerWithPayload<AppState, TPaylaod>,
+): AsyncActionHandlerWithPayload<AppState, TPaylaod> {
+  return handler
+}
+
 export interface AsyncActionMap<TState> {
-  [actionType: string]: AsyncActionHandler<TState, any>
+  [actionType: string]: AsyncActionHandlerWithPayload<TState, any>
 }
 
 export const createAsyncMiddleware = <TState>(

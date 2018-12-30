@@ -54,4 +54,4 @@ export const rootNode = genBookmarkNode({
   ),
 })
 
-export const nodeList = flattenTree(rootNode)
+export const nodeList = flattenTree(rootNode, node => node.children || [])

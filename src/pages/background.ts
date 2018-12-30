@@ -1,9 +1,8 @@
 import { createBackgroundStore } from "redux-webext"
 import { createStore } from "../redux-store"
-import { fetchBookmarks } from "../state/bookmarks"
 
-const backgroundStore = createBackgroundStore({
+createBackgroundStore({
   store: createStore(),
 })
 
-backgroundStore.dispatch(fetchBookmarks())
+// backgroundStore.dispatch(fetchBookmarks())

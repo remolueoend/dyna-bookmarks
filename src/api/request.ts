@@ -1,4 +1,6 @@
-export const apiRequest = async <TResponse>(
+import { ApiResponse } from "./types"
+
+export const apiRequest = async <TResponse extends ApiResponse>(
   endpoint: string,
   token: string,
   params: {},
@@ -16,6 +18,13 @@ export const apiRequest = async <TResponse>(
   })
 
   const responseContent: TResponse = await response.json()
+  if (responseContent._code !== "Ok") {
+    throw new Error(
+      `API request failed with code: ${
+        responseContent._code
+      }: ${responseContent._msg || "no message provided"}`,
+    )
+  }
 
   return responseContent
 }

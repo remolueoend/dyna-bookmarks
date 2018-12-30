@@ -45,6 +45,7 @@
     "babel-plugin-react-require": "^3.0.1",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
+    "dotenv-webpack": "^1.6.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-to-json": "^3.3.5",

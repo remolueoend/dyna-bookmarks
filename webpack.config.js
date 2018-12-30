@@ -7,6 +7,7 @@ const { name, version, description, homepage } = require("./package.json")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 const lessToJs = require("less-vars-to-js")
 const fs = require("fs")
+const Dotenv = require("dotenv-webpack")
 
 const VENDOR = process.env.WEB_EXT_VENDOR || "firefox"
 
@@ -115,6 +116,7 @@ module.exports = {
         manifest_version: 2,
       },
     }),
+    new Dotenv(),
   ],
   // externals: {
   //   react: 'React',

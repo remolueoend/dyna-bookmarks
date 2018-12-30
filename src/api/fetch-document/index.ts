@@ -1,5 +1,6 @@
 import { RawNode } from "lib/trees"
 import { apiRequest } from "../request"
+import { ApiResponse } from "../types"
 
 export type FetchDocumentNode = RawNode<{
   content: string
@@ -7,13 +8,12 @@ export type FetchDocumentNode = RawNode<{
   checked: boolean
 }>
 
-export interface FetchDocumentContent {
-  _code: "Ok"
+export interface FetchDocumentContentResponse extends ApiResponse {
   title: string
   nodes: FetchDocumentNode[]
 }
 
 export const fetchDocumentContent = async (token: string, fileId: string) =>
-  apiRequest<FetchDocumentContent>("/doc/read", token, {
+  apiRequest<FetchDocumentContentResponse>("/doc/read", token, {
     file_id: fileId,
   })

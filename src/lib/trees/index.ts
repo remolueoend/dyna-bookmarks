@@ -1,3 +1,4 @@
+import { FetchDocumentNode } from "api/fetch-document"
 import { filter } from "fuzzy"
 import { Omit } from "lib/types"
 import { flatten } from "ramda"
@@ -100,9 +101,43 @@ export const hasChildren = <TData>(
 ): node is TreeNodeWithChildren<TData> =>
   !!node.children && !!node.children.length
 
-export const flattenTree = <TData>(
-  rootNode: TreeNode<TData>,
-): Array<TreeNode<TData>> => [
+/**
+ * Flattens a tree starting with the given root node and returns a flat array of nodes.
+ *
+ * @param rootNode the current root node to start with.
+ * @param getChildren function returning all children of a given node.
+ */
+export const flattenTree = <TTree>(
+  rootNode: TTree,
+  getChildren: (node: TTree) => TTree[],
+): TTree[] => [
   rootNode,
-  ...flatten((rootNode.children || []).map(child => flattenTree(child))),
+  ...flatten(
+    getChildren(rootNode).map(child => flattenTree(child, getChildren)),
+  ),
 ]
+
+export const isValidUrl = (url: string) => {
+  try {
+    const parsedUrl = new URL(url)
+    return !!parsedUrl
+  } catch (_) {
+    return false
+  }
+}
+
+const parseContentNodeRegex = /\[(.*)\]\((.*)\)/
+export const parseNodeContent = (
+  node: FetchDocumentNode,
+): { label: string; href?: string } => {
+  if (!parseContentNodeRegex.test(node.content)) {
+    return { label: node.content }
+  }
+  const parsed = parseContentNodeRegex.exec(node.content)
+  const [, label, href] = parsed! // use use RegExp:test above
+
+  return {
+    label,
+    href: isValidUrl(href) ? href : undefined,
+  }
+}
