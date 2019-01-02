@@ -4,7 +4,7 @@ import { ThemedStyledFunction } from "styled-components"
 const defaultThemeVars = require("!../.config/less-variables-loader!antd/lib/style/themes/default.less")
 const customThemeVars = require("!../.config/less-variables-loader!./theme-vars.less")
 
-type AvailableVars = "background-color-light" | "primary-color"
+type AvailableVars = "background-color-light" | "primary-color" | "normal-color"
 
 export const getThemeVar = (varName: AvailableVars) => {
   const value = (customThemeVars[varName] ||

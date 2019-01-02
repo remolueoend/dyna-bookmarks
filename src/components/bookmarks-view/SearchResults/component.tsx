@@ -1,5 +1,5 @@
 import { List } from "antd"
-import { BookmarksNode } from "state/bookmarks"
+import { BookmarksNode } from "state/bookmarks/data"
 import styled, { css } from "styled-components"
 import { getThemeVar, styledWithProps } from "theme"
 

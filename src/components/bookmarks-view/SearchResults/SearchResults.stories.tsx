@@ -1,5 +1,5 @@
 import { storiesOf } from "@storybook/react"
-import { BookmarksNode } from "state/bookmarks"
+import { BookmarksNode } from "state/bookmarks/data"
 import { SearchResults } from "./component"
 
 const resultNodes: BookmarksNode[] = [

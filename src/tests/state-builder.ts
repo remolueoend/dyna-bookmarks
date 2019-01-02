@@ -1,11 +1,12 @@
 // tslint:disable:max-classes-per-file
 import { AppState } from "root-reducer"
+import { BookmarksState } from "state/bookmarks"
 import {
   BookmarksDataState,
   BookmarksNode,
-  BookmarksState,
   initialDataState,
-} from "state/bookmarks"
+} from "state/bookmarks/data"
+import { bookmarksImportInitState } from "state/bookmarks/import"
 import { BookmarksSearchState, initSearchState } from "state/bookmarks/search"
 import { initTreeState } from "state/bookmarks/tree"
 
@@ -14,6 +15,7 @@ const initialAppState: AppState = {
     data: initialDataState,
     search: initSearchState,
     tree: initTreeState,
+    import: bookmarksImportInitState,
   },
 }
 

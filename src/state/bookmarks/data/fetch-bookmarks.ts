@@ -1,10 +1,7 @@
+import { fetchDocumentContent, FetchDocumentNode } from "api/fetch-document"
+import { createAsyncHandlerFor } from "lib/redux-async"
 import { NodeID, parseNodeContent, resolveNodes } from "lib/trees"
 import { fetchBookmarks, updateBookmarks } from "."
-import {
-  fetchDocumentContent,
-  FetchDocumentNode,
-} from "../../api/fetch-document"
-import { createAsyncHandlerFor } from "../../lib/redux-async"
 
 export const fetchBookmarksHandler = createAsyncHandlerFor(
   fetchBookmarks,

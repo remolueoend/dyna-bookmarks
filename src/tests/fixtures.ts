@@ -1,7 +1,7 @@
 import { internet, lorem, random, seed } from "faker"
 import { flattenTree } from "lib/trees"
 import { times } from "ramda"
-import { BookmarksNode } from "state/bookmarks"
+import { BookmarksNode } from "state/bookmarks/data"
 
 seed(34567989726504680)
 

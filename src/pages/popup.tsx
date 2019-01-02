@@ -1,10 +1,8 @@
-import { Button } from "antd"
-import { BookmarksView } from "components/bookmarks-view/BookmarksView"
+import { AppRoot } from "components/AppRoot"
 import * as ReactDOM from "react-dom"
 import { Provider } from "react-redux"
 import { createUIStore } from "redux-webext"
-import { fetchBookmarks } from "state/bookmarks"
-import { importBookmarks } from "state/bookmarks/import"
+import { fetchBookmarks } from "state/bookmarks/data"
 // import { createGlobalStyle } from "styled-components"
 
 /*
@@ -24,10 +22,7 @@ async function initApp() {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Button type="primary" onClick={() => store.dispatch(importBookmarks())}>
-        Import Browser Bookmarks
-      </Button>
-      <BookmarksView />
+      <AppRoot />
     </Provider>,
     mountNode,
   )

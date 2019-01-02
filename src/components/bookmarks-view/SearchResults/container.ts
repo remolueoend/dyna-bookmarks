@@ -2,7 +2,7 @@ import { searchTree } from "lib/trees"
 import { connect } from "react-redux"
 import { createSelector } from "reselect"
 import { AppState } from "root-reducer"
-import { BookmarksNode } from "state/bookmarks"
+import { BookmarksNode } from "state/bookmarks/data"
 import { SearchResults } from "./component"
 
 const searchResultsSelector = createSelector<
