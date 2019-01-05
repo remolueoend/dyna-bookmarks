@@ -2,6 +2,7 @@ import { FetchDocumentNode } from "api/fetch-document"
 import { filter } from "fuzzy"
 import { Omit } from "lib/types"
 import { flatten } from "ramda"
+import { BookmarksNode } from "state/bookmarks/data"
 
 export type NodeID = string
 
@@ -15,7 +16,7 @@ export interface TreeNode<TData> {
   id: NodeID
   children?: Array<TreeNode<TData>>
   data: TData
-  path: string[]
+  parentNode?: TreeNode<TData>
 }
 export type TreeNodeWithChildren<TData> = Omit<TreeNode<TData>, "children"> & {
   children: Array<TreeNode<TData>>
@@ -25,10 +26,10 @@ export type FlatNodeMap<TData> = Map<NodeID, TreeNode<TData>>
 
 export const resolveNode = <TRaw, TData>(
   nodeId: NodeID,
-  path: string[],
   rawNodeMap: Map<NodeID, RawNode<TRaw>>,
   nodeMap: FlatNodeMap<TData>,
   mapData: (node: RawNode<TRaw>) => TData,
+  parentNode?: TreeNode<TData>,
 ): TreeNode<TData> => {
   const rawNode = rawNodeMap.get(nodeId)
   if (!rawNode) {
@@ -36,24 +37,19 @@ export const resolveNode = <TRaw, TData>(
       `[lib/trees/resolveNode]: Cannot find node with NodeID ${nodeId}`,
     )
   }
+  const node: TreeNode<TData> = {
+    id: rawNode.id,
+    data: mapData(rawNode),
+    parentNode,
+    children: [],
+  }
+
   const childNodes = (rawNode.children || []).map(childId =>
     nodeMap.has(childId)
       ? nodeMap.get(childId)!
-      : resolveNode(
-          childId,
-          [...path, rawNode.text],
-          rawNodeMap,
-          nodeMap,
-          mapData,
-        ),
+      : resolveNode(childId, rawNodeMap, nodeMap, mapData, node),
   )
-
-  const node = {
-    id: rawNode.id,
-    children: childNodes,
-    path,
-    data: mapData(rawNode),
-  }
+  node.children = childNodes
 
   nodeMap.set(node.id, node)
 
@@ -65,7 +61,7 @@ export const resolveNodes = <TRaw, TData>(
   mapData: (node: RawNode<TRaw>) => TData,
 ) => {
   const nodes = new Map<NodeID, TreeNode<TData>>()
-  const rootNode = resolveNode("root", [], nodeMap, nodes, mapData)
+  const rootNode = resolveNode("root", nodeMap, nodes, mapData)
 
   return {
     nodeList: Array.from(nodes.values()),
@@ -83,11 +79,10 @@ export const resolveNodes = <TRaw, TData>(
 export const searchTree = <TNodeData>(
   nodeList: Array<TreeNode<TNodeData>>,
   searchText: string,
-  getSearchContent: (node: TreeNode<TNodeData>) => string[],
+  getSearchContent: (node: TreeNode<TNodeData>) => string,
 ) => {
   return filter(searchText, nodeList, {
-    extract: node =>
-      `${node.path.join("/")}/${getSearchContent(node).join(" ")}`,
+    extract: node => getSearchContent(node),
   }).map(result => result.original)
 }
 
@@ -141,3 +136,21 @@ export const parseNodeContent = (
     href: isValidUrl(href) ? href : undefined,
   }
 }
+
+/**
+ * Returns a string array of path elements to the given node.
+ *
+ * @param node the node to get the path from.
+ */
+export const getBookmarkPath = (node: BookmarksNode) =>
+  getParentNodes(node).map(n => n.data.label)
+
+/**
+ * Returns an ascending list of all parent nodes of the given node.
+ *
+ * @param node The node to get the list of parent from.
+ */
+export const getParentNodes = <TData>(
+  node: TreeNode<TData>,
+): Array<TreeNode<TData>> =>
+  node.parentNode ? [...getParentNodes(node.parentNode), node.parentNode] : []

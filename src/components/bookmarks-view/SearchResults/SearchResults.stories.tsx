@@ -2,10 +2,16 @@ import { storiesOf } from "@storybook/react"
 import { BookmarksNode } from "state/bookmarks/data"
 import { SearchResults } from "./component"
 
+const rootNode: BookmarksNode = {
+  id: "root",
+  data: {
+    label: "root",
+  },
+}
 const resultNodes: BookmarksNode[] = [
   {
     id: "123",
-    path: ["project A", "development"],
+    parentNode: rootNode,
     children: [],
     data: {
       label: "Gitlab",
@@ -13,7 +19,7 @@ const resultNodes: BookmarksNode[] = [
   },
   {
     id: "456",
-    path: ["learning", "school", "coding"],
+    parentNode: rootNode,
     children: [],
     data: {
       label: "Github",
@@ -21,7 +27,7 @@ const resultNodes: BookmarksNode[] = [
   },
   {
     id: "123",
-    path: ["coding", "gitlab"],
+    parentNode: rootNode,
     children: [],
     data: {
       label: "Project B",

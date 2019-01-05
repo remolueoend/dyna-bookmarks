@@ -1,25 +1,9 @@
 import { List } from "antd"
+import { getBookmarkPath } from "lib/trees"
 import { BookmarksNode } from "state/bookmarks/data"
 import styled, { css } from "styled-components"
 import { getThemeVar, styledWithProps } from "theme"
-
-const StyledListItem = styledWithProps<{ selected: boolean }>()(
-  styled(List.Item),
-)`
-  &:hover {
-    background-color: ${getThemeVar("background-color-light")};
-    cursor: pointer;
-  }
-  ${({ selected }) =>
-    selected &&
-    css`
-      background-color: ${getThemeVar("primary-color")} !important;
-      & div,
-      h4 {
-        color: white;
-      }
-    `}
-`
+import { ResultItem } from "../ResultItem"
 
 export interface SearchResultsProps {
   style?: {}
@@ -28,7 +12,19 @@ export interface SearchResultsProps {
   selectedIndex?: number
 }
 
-const SearchResultsBase = styled.div``
+const StyledListItem = styled(List.Item)`
+  &&& {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+`
+
+const SearchResultsBase = styled.div`
+  width: 100%;
+`
 
 export const SearchResults: React.SFC<SearchResultsProps> = ({
   style,
@@ -41,14 +37,15 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
       locale={{
         emptyText: "no bookmarks found",
       }}
-      bordered
       size={"small"}
       dataSource={results}
       renderItem={(node: BookmarksNode, index: number) => (
-        <StyledListItem selected={index === selectedIndex}>
-          <List.Item.Meta
+        <StyledListItem>
+          <ResultItem
+            selected={index === selectedIndex}
             title={node.data.label}
-            description={node.path.join("/")}
+            url={node.data.href}
+            path={getBookmarkPath(node)}
           />
         </StyledListItem>
       )}

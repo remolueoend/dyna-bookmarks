@@ -51,7 +51,7 @@ describe("resolveNodes", () => {
     })
   })
 
-  it("sets the path of each node correctly", () => {
+  it("sets the parentNode of each node correctly", () => {
     const { rootNode } = resolveNodes(nodes, () => ({}))
 
     const child1 = rootNode.children![0]
@@ -59,10 +59,10 @@ describe("resolveNodes", () => {
     const child11 = rootNode.children![0].children![0]
     const child12 = rootNode.children![0].children![1]
 
-    expect(rootNode.path).toHaveLength(0)
-    expect(child1.path).toEqual(["bookmarks"])
-    expect(child2.path).toEqual(["bookmarks"])
-    expect(child11.path).toEqual(["bookmarks", "child 1 text"])
-    expect(child12.path).toEqual(["bookmarks", "child 1 text"])
+    expect(rootNode.parentNode).toBeUndefined()
+    expect(child1.parentNode!.id).toEqual("bookmarks")
+    expect(child2.parentNode!.id).toEqual("bookmarks")
+    expect(child11.parentNode!.id).toEqual("child 1")
+    expect(child12.parentNode!.id).toEqual("child 1")
   })
 })

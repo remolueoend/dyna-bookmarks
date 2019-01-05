@@ -10,6 +10,7 @@ export interface AppRootProps {
 const AppRootBase = styled.div`
   margin: 5px;
   border-radius: 3px;
+  width: 300px;
 `
 
 export const AppRoot: React.SFC<AppRootProps> = ({ style, className }) => (

@@ -1,4 +1,4 @@
-import { searchTree } from "lib/trees"
+import { getBookmarkPath, searchTree } from "lib/trees"
 import { connect } from "react-redux"
 import { createSelector } from "reselect"
 import { AppState } from "root-reducer"
@@ -16,13 +16,14 @@ const searchResultsSelector = createSelector<
   (searchTerm, nodeList) =>
     !searchTerm || !nodeList
       ? []
-      : searchTree(nodeList || [], searchTerm, node => [
-          node.data.label,
-          ...(node.data.href ? [node.data.href] : []),
-        ]),
+      : searchTree(nodeList || [], searchTerm, node =>
+          [...getBookmarkPath(node), node.data.label].join("/"),
+        ),
 )
 
-export const SearchResultsContainer = connect((state: AppState) => ({
-  results: searchResultsSelector(state),
-  selectedIndex: state.bookmarks.search.selectedIndex || 0,
-}))(SearchResults)
+export const SearchResultsContainer = connect(
+  (state: AppState, { showLinksOnly }: { showLinksOnly?: boolean }) => ({
+    results: searchResultsSelector(state),
+    selectedIndex: state.bookmarks.search.selectedIndex || 0,
+  }),
+)(SearchResults)
