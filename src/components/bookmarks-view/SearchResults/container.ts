@@ -9,21 +9,24 @@ const searchResultsSelector = createSelector<
   AppState,
   string | undefined,
   BookmarksNode[] | undefined,
+  boolean,
   BookmarksNode[]
 >(
   state => state.bookmarks.search.searchTerm,
   state => state.bookmarks.data.nodeList,
-  (searchTerm, nodeList) =>
-    !searchTerm || !nodeList
-      ? []
-      : searchTree(nodeList || [], searchTerm, node =>
-          [...getBookmarkPath(node), node.data.label].join("/"),
-        ),
+  state => state.view.showLinksOnly,
+  (searchTerm, nodeList, showLinksOnly) => {
+    const results =
+      !searchTerm || !nodeList
+        ? []
+        : searchTree(nodeList || [], searchTerm, node =>
+            [...getBookmarkPath(node), node.data.label].join("/"),
+          )
+    return !showLinksOnly ? results : results.filter(n => !!n.data.href)
+  },
 )
 
-export const SearchResultsContainer = connect(
-  (state: AppState, { showLinksOnly }: { showLinksOnly?: boolean }) => ({
-    results: searchResultsSelector(state),
-    selectedIndex: state.bookmarks.search.selectedIndex || 0,
-  }),
-)(SearchResults)
+export const SearchResultsContainer = connect((state: AppState) => ({
+  results: searchResultsSelector(state),
+  selectedIndex: state.bookmarks.search.selectedIndex || 0,
+}))(SearchResults)

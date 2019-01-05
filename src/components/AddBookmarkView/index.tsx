@@ -1,0 +1,1 @@
+export { AddBookmarkView } from "./component"

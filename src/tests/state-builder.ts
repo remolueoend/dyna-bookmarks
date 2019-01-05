@@ -9,6 +9,7 @@ import {
 import { bookmarksImportInitState } from "state/bookmarks/import"
 import { BookmarksSearchState, initSearchState } from "state/bookmarks/search"
 import { initTreeState } from "state/bookmarks/tree"
+import { initViewState } from "state/view"
 
 const initialAppState: AppState = {
   bookmarks: {
@@ -17,6 +18,7 @@ const initialAppState: AppState = {
     tree: initTreeState,
     import: bookmarksImportInitState,
   },
+  view: initViewState,
 }
 
 export class AppStateBuilder {

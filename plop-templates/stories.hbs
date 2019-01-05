@@ -1,7 +1,7 @@
 import { storiesOf } from "@storybook/react"
 import { {{name}} } from "./component"
 
-storiesOf("{{folder}}/{{name}}", module).add(
+storiesOf("{{#if folder}}{{folder}}/{{/if}}{{name}}", module).add(
   "default view",
   () => <{{name}} />,
 )

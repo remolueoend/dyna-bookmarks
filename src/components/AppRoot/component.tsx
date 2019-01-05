@@ -1,6 +1,6 @@
-import { BookmarksView } from "components/bookmarks-view/BookmarksView"
 import { TitleBar } from "components/TitleBar"
 import styled from "styled-components"
+import { ViewRouter } from "../ViewRouter"
 
 export interface AppRootProps {
   style?: {}
@@ -16,6 +16,6 @@ const AppRootBase = styled.div`
 export const AppRoot: React.SFC<AppRootProps> = ({ style, className }) => (
   <AppRootBase style={style} className={className}>
     <TitleBar />
-    <BookmarksView />
+    <ViewRouter />
   </AppRootBase>
 )
