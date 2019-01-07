@@ -3,7 +3,13 @@ import { SearchBar } from "./component"
 
 describe("components/core/bookmarks-tree/SearchBar", () => {
   it("renders correctly", () => {
-    const tree = render(<SearchBar value="foo" onChange={() => undefined} />)
+    const tree = render(
+      <SearchBar
+        value="foo"
+        onChange={() => undefined}
+        moveNodeSelection={() => undefined}
+      />,
+    )
     expect(tree.find("input").attr("value")).toEqual("foo")
   })
 })

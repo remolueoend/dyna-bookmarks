@@ -9,7 +9,7 @@ export interface BookmarkTreeProps {
   className?: string
   rootNode: BookmarksNode | undefined
   expandedNodes: NodeID[]
-  selectedNode?: NodeID
+  selectedNode?: BookmarksNode
 }
 
 const BookmarkTreeBase = styled.div``
@@ -67,7 +67,7 @@ export interface TreeNodeProps {
   className?: string
   node: BookmarksNode
   expandedNodes: NodeID[]
-  selectedNode?: NodeID
+  selectedNode?: BookmarksNode
 }
 export const TreeNode: React.SFC<TreeNodeProps> = ({
   style,
@@ -79,7 +79,7 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
   const isExpanded = expandedNodes.includes(node.id)
   return (
     <NodeWrapper>
-      <NodeLabel selected={node.id === selectedNode}>
+      <NodeLabel selected={!!selectedNode && node.id === selectedNode.id}>
         <NodeIcon
           type={
             hasChildren(node) ? (isExpanded ? "folder-open" : "folder") : "link"

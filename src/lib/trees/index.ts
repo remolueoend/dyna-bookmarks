@@ -154,3 +154,40 @@ export const getParentNodes = <TData>(
   node: TreeNode<TData>,
 ): Array<TreeNode<TData>> =>
   node.parentNode ? [...getParentNodes(node.parentNode), node.parentNode] : []
+
+/**
+ * Returns the child index (0 based) of the given node relative to its direct children.
+ * Returns undefined if the current node has no parent.
+ *
+ * @param node the node to get the index for
+ */
+export const getNodeIndex = <TData>(node: TreeNode<TData>) =>
+  node.parentNode &&
+  (node.parentNode.children || []).findIndex(child => child.id === node.id)
+
+/**
+ * Returns the next sibling of a node, if available, else undefined
+ *
+ * @param node The node to get the parent from
+ */
+export const getNextSibling = <TData>(node: TreeNode<TData>) =>
+  !node.parentNode
+    ? undefined
+    : node.parentNode.children![getNodeIndex(node)! + 1]
+
+/**
+ * Returns the next sibling of the given node's parent.
+ *
+ * @param node the current node
+ */
+export const getNextParentSibling = (
+  node: BookmarksNode | undefined,
+): typeof node => {
+  if (!node || !node.parentNode || !node.parentNode.parentNode) {
+    return undefined
+  }
+
+  return (
+    getNextSibling(node.parentNode) || getNextParentSibling(node.parentNode)
+  )
+}

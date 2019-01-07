@@ -13,6 +13,7 @@ storiesOf("bookmarks-view/SearchBar", module).add("default view", () => {
           setValue(e)
         }}
         value={value}
+        moveNodeSelection={() => undefined}
       />
     ),
   )

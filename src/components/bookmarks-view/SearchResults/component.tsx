@@ -9,7 +9,7 @@ export interface SearchResultsProps {
   style?: {}
   className?: string
   results: BookmarksNode[]
-  selectedIndex?: number
+  selectedIndex: number
 }
 
 const StyledListItem = styled(List.Item)`
@@ -42,7 +42,14 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
       renderItem={(node: BookmarksNode, index: number) => (
         <StyledListItem>
           <ResultItem
-            selected={index === selectedIndex}
+            selected={
+              index ===
+              (selectedIndex >= 0
+                ? selectedIndex % results.length
+                : results.length -
+                  1 -
+                  ((Math.abs(selectedIndex) - 1) % results.length))
+            }
             title={node.data.label}
             url={node.data.href}
             path={getBookmarkPath(node)}

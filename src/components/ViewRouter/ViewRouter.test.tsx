@@ -3,7 +3,7 @@ import { ViewRouter } from "./component"
 
 describe("components/ViewRouter", () => {
   it("renders correctly", () => {
-    const tree = render(<ViewRouter />)
+    const tree = render(<ViewRouter currentView="explorer" />)
     expect(tree).toBeFalsy()
   })
 })

@@ -31,6 +31,10 @@ const ResultItemBase = styledWithProps<{ selected: boolean }>()(styled.div)`
   width: 100%;
   overflow: hidden;
   padding: 0 5px;
+  &: hover {
+    background-color: ${getThemeVar("normal-color")}
+  }
+  
   ${({ selected }) =>
     selected &&
     css`
