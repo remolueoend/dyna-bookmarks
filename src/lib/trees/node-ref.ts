@@ -1,5 +1,6 @@
+import { filter } from "fuzzy"
 import { equals, head, tail } from "ramda"
-import { TreeNode } from "."
+import { flattenTree, TreeNode } from "."
 
 /**
  * Represents a reference to a node in a specific tree.
@@ -48,16 +49,6 @@ export class NodeRef<TData> implements TreeNode<TData> {
   }
 
   /**
-   * Boolean flag set to true if the referenced node has at least one child.
-   *
-   * @readonly
-   * @memberof NodeRef
-   */
-  public get hasChildren() {
-    return !!this.children && !!this.children.length
-  }
-
-  /**
    * Array of type `TreeNode` of all children of the referenced node.
    * Value is an empty array if node has no children.
    * Use `NodeRef.getChildRefs` to get an array of node references of the current node's children.
@@ -67,6 +58,16 @@ export class NodeRef<TData> implements TreeNode<TData> {
    */
   public get children() {
     return this.instance.children || []
+  }
+
+  /**
+   * Boolean flag set to true if the referenced node has at least one child.
+   *
+   * @readonly
+   * @memberof NodeRef
+   */
+  public get hasChildren() {
+    return !!this.children && !!this.children.length
   }
 
   /**
@@ -136,7 +137,7 @@ export class NodeRef<TData> implements TreeNode<TData> {
         }] is root. Use \`NodeRef.isRoot\` to test.`,
       )
     }
-    const index = this.parent().children!.findIndex(c => c.id === this.id)
+    const index = this.parent().children.findIndex(c => c.id === this.id)
     if (index === -1) {
       throw new Error(
         `[node-ref]::getIndex: Could not find node [${
@@ -163,7 +164,7 @@ export class NodeRef<TData> implements TreeNode<TData> {
         }] is root. Use \`NodeRef.isRoot\` to test.`,
       )
     }
-    return (this.hasParent && this.parent().getChildRefs()) || []
+    return this.parent().getChildRefs()
   }
 
   /**
@@ -267,5 +268,47 @@ export class NodeRef<TData> implements TreeNode<TData> {
    */
   public equals(ref: NodeRef<TData>) {
     return equals(this.path, ref.path)
+  }
+
+  /**
+   * Flattens the tree of the current node breath-first and returns the result
+   * as a flat array of nodes.
+   *
+   * @returns {Array<NodeRef<TData>>}
+   * @memberof NodeRef
+   */
+  public flatten(): Array<NodeRef<TData>> {
+    return flattenTree<NodeRef<TData>>(this, node => node.getChildRefs())
+  }
+
+  /**
+   * Fuzzy searches through the tree under the current node.
+   * Returns a flat array of nodes containing the given search term
+   * in the string returned by the given function `getSearchContent`.
+   *
+   * @param {string} term The term to search for.
+   * @param {(node: NodeRef<TData>) => string} getSearchContent Function returning the string
+   * to search through for a given node.
+   * @returns {Array<NodeRef<TData>>}
+   * @memberof NodeRef
+   */
+  public fuzzySearch(
+    term: string,
+    getSearchContent: (node: NodeRef<TData>) => string,
+  ): Array<NodeRef<TData>> {
+    return filter(term, this.flatten(), {
+      extract: node => getSearchContent(node),
+    }).map(result => result.original)
+  }
+
+  /**
+   * Returns a unique ID in the whole tree for the current node.
+   * The returned ID contains all node IDs of the current node's path.
+   */
+  public uuid() {
+    return this.path
+      .reverse()
+      .map(n => n.id)
+      .join("/")
   }
 }

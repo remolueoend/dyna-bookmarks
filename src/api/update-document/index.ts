@@ -4,14 +4,24 @@ import { NodeID } from "lib/trees"
 
 // documentation of API /doc/edit: https://apidocs.dynalist.io/#make-change-to-the-content-of-a-document
 
-export type DocumentChangeType = "insert" | "edit" | "move" | "delete"
+/**
+ * The type of change to apply to a node.
+ */
+export type NodeChangeType = "insert" | "edit" | "move" | "delete"
 
-export interface DocumentNodeChange<
-  T extends DocumentChangeType = DocumentChangeType
-> {
+/**
+ * Base type of all possible node changes. Defines a property `action` whose
+ * value corresponds to the generic type `T`.
+ *
+ * @template T The generic type of node change. Must by a subset of `NodeChangeType`.
+ */
+export interface DocumentNodeChange<T extends NodeChangeType = NodeChangeType> {
   action: T
 }
 
+/**
+ * Describes an insert change, ie. adding a new node to document.
+ */
 export interface InsertNodeChange extends DocumentNodeChange<"insert"> {
   parent_id: NodeID
   index?: number
@@ -20,6 +30,9 @@ export interface InsertNodeChange extends DocumentNodeChange<"insert"> {
   checked?: boolean
 }
 
+/**
+ * Describes an edit change, ie. editing an existing node in a document.
+ */
 export interface EditNodeChange extends DocumentNodeChange<"edit"> {
   node_id: NodeID
   content?: string
@@ -27,6 +40,9 @@ export interface EditNodeChange extends DocumentNodeChange<"edit"> {
   checked?: boolean
 }
 
+/**
+ * Describes a move change, ie. moving an existing node to a new parent in the same document.
+ */
 export interface MoveNodeChange extends DocumentNodeChange<"move"> {
   node_id: NodeID
   parent_id: NodeID
@@ -37,17 +53,26 @@ export interface MoveNodeChange extends DocumentNodeChange<"move"> {
   index: number
 }
 
+/**
+ * Describes a delete change, ie. deleting an exising node in a document.
+ */
 export interface DeleteNodeChange extends DocumentNodeChange<"delete"> {
   node_id: NodeID
 }
 
-export interface UpdateDocumentContentResponse extends ApiResponse {
-  results: boolean[]
-}
-
+/**
+ * Union type of all possible node changes.
+ */
 export type DocumentNodeChanges = Array<
   InsertNodeChange | EditNodeChange | MoveNodeChange | DeleteNodeChange
 >
+
+/**
+ * Describes the dynalist API response of a document update request.
+ */
+export interface UpdateDocumentContentResponse extends ApiResponse {
+  results: boolean[]
+}
 
 /**
  * sends an update request to dynalist api for the given file id using the given token and

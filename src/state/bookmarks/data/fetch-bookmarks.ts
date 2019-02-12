@@ -3,6 +3,9 @@ import { createAsyncHandlerFor } from "lib/redux-async"
 import { NodeID, parseNodeContent, resolveNodes } from "lib/trees"
 import { fetchBookmarks, updateBookmarks } from "."
 
+export const resolveRawNodes = (nodeMap: Map<NodeID, FetchDocumentNode>) =>
+  resolveNodes(nodeMap, node => parseNodeContent(node))
+
 export const fetchBookmarksHandler = createAsyncHandlerFor(
   fetchBookmarks,
   async (_, dispatch) => {
@@ -16,10 +19,8 @@ export const fetchBookmarksHandler = createAsyncHandlerFor(
         node => [node.id, node] as [NodeID, FetchDocumentNode],
       ),
     )
-    const { rootNode, nodeList } = resolveNodes(nodeMap, node => ({
-      ...parseNodeContent(node),
-    }))
+    const rootNode = resolveRawNodes(nodeMap)
 
-    dispatch(updateBookmarks(rootNode, nodeList))
+    dispatch(updateBookmarks(rootNode, rootNode.flatten()))
   },
 )

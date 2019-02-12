@@ -1,7 +1,7 @@
 import { Input } from "antd"
 import { SearchProps } from "antd/es/input/Search"
 import Search from "antd/lib/input/Search"
-import { ChangeEvent, KeyboardEvent, PureComponent, RefObject } from "react"
+import { KeyboardEvent, PureComponent, RefObject } from "react"
 import { MoveNodeSelectionDir } from "state/bookmarks/tree/move-selection"
 import styled from "styled-components"
 

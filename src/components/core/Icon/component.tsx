@@ -1,6 +1,6 @@
 import { Icon as AntdIcon } from "antd"
 import { IconProps as AntIconProps } from "antd/lib/icon/index"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import { getThemeVar } from "theme"
 
 export interface IconProps extends AntIconProps {

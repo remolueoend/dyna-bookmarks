@@ -1,5 +1,15 @@
 import { ApiResponse } from "./types"
 
+/**
+ * Sends an API request to the given dynalist API endpoint with the given token and additional params.
+ * Rejects the returned promise if the API responds with a different response code than `Ok`.
+ *
+ * @template TResponse Type of api response to expect.
+ *
+ * @param endpoint The API endpoint to use, always prefixed with a `/`.
+ * @param token Authentication token to use.
+ * @param params request specific options sent as part of the request body.
+ */
 export const apiRequest = async <TResponse extends ApiResponse>(
   endpoint: string,
   token: string,

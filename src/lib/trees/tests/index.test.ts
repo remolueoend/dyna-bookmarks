@@ -2,24 +2,21 @@ import { NodeID, RawNode, resolveNodes } from "../index"
 
 describe("resolveNodes", () => {
   const nodes = new Map<NodeID, RawNode<{}>>([
-    ["root", { children: ["child1", "child2"], id: "root", text: "bookmarks" }],
-    [
-      "child1",
-      { children: ["child11", "child12"], id: "child1", text: "child 1 text" },
-    ],
-    ["child2", { children: [], id: "child2", text: "child 2 text" }],
-    ["child11", { children: [], id: "child11", text: "child 11 text" }],
-    ["child12", { children: [], id: "child12", text: "child 12 text" }],
+    ["root", { children: ["child1", "child2"], id: "root" }],
+    ["child1", { children: ["child11", "child12"], id: "child1" }],
+    ["child2", { children: [], id: "child2" }],
+    ["child11", { children: [], id: "child11" }],
+    ["child12", { children: [], id: "child12" }],
   ])
   it("returns the correct reference to root", () => {
-    const { rootNode } = resolveNodes(nodes, () => ({ foo: 1 }))
+    const rootNode = resolveNodes(nodes, () => ({ foo: 1 }))
 
     expect(rootNode.id).toEqual("root")
     expect(rootNode.data).toEqual({ foo: 1 })
   })
 
   it("resolves child nodes correctly", () => {
-    const { rootNode } = resolveNodes(nodes, () => ({}))
+    const rootNode = resolveNodes(nodes, () => ({}))
 
     const child1 = rootNode.children![0]
     const child2 = rootNode.children![1]
@@ -39,30 +36,19 @@ describe("resolveNodes", () => {
     expect(child12.children).toHaveLength(0)
   })
 
-  it("returns a correct flat lists of nodes", () => {
-    const { nodeList } = resolveNodes(nodes, n => ({
-      link: `https://${n.text}`,
-      text: n.text,
-    }))
+  it("resolves the node path of each node correctly", () => {
+    const rootNode = resolveNodes(nodes, () => ({}))
 
-    expect(nodeList).toHaveLength(5)
-    nodeList.forEach(node => {
-      expect(node.data.link).toEqual(`https://${node.data.text}`)
-    })
-  })
+    const child1 = rootNode.firstChild()!
+    const child2 = rootNode.getNthChild(1)!
+    const child11 = rootNode.firstChild()!.firstChild()!
+    const child12 = rootNode.firstChild()!.getNthChild(1)!
 
-  it("sets the parentNode of each node correctly", () => {
-    const { rootNode } = resolveNodes(nodes, () => ({}))
-
-    const child1 = rootNode.children![0]
-    const child2 = rootNode.children![1]
-    const child11 = rootNode.children![0].children![0]
-    const child12 = rootNode.children![0].children![1]
-
-    expect(rootNode.parentNode).toBeUndefined()
-    expect(child1.parentNode!.id).toEqual("bookmarks")
-    expect(child2.parentNode!.id).toEqual("bookmarks")
-    expect(child11.parentNode!.id).toEqual("child 1")
-    expect(child12.parentNode!.id).toEqual("child 1")
+    expect(() => rootNode.parent()).toThrow()
+    expect(rootNode.uuid()).toEqual("root")
+    expect(child1.uuid()).toEqual("root/child1")
+    expect(child2.uuid()).toEqual("root/child2")
+    expect(child11.uuid()).toEqual("root/child1/child11")
+    expect(child12.uuid()).toEqual("root/child1/child12")
   })
 })

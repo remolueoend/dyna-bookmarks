@@ -13,6 +13,6 @@ storiesOf("bookmarks-view/BookmarkTree", module)
     <BookmarkTree
       rootNode={rootNode}
       expandedNodes={["6cb5aed5-dbf6-4f2b-bfb1-7e8014b39cc1"]}
-      selectedNode={rootNode.children![0]}
+      selectedNode={rootNode.firstChild()}
     />
   ))

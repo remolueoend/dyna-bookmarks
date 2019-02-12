@@ -1,8 +1,7 @@
 import { List } from "antd"
 import { getBookmarkPath } from "lib/trees"
 import { BookmarksNode } from "state/bookmarks/data"
-import styled, { css } from "styled-components"
-import { getThemeVar, styledWithProps } from "theme"
+import styled from "styled-components"
 import { ResultItem } from "../ResultItem"
 
 export interface SearchResultsProps {

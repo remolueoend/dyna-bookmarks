@@ -10,6 +10,10 @@ import {
   ReducerMap,
 } from "redux-actions"
 
+/**
+ * Class providing methods for building a redux reducer function.
+ * Expects an initial state when constructed.
+ */
 export class ReducerBuilder<TState> {
   constructor(
     protected readonly initialState: TState,

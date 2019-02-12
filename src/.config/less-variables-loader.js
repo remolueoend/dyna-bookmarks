@@ -7,6 +7,10 @@ const path = require("path")
 
 temp.track()
 
+/**
+ * Webpack loader expecing a `*.less` file and resolving a JSON file containing
+ * all variables and values declared in the input file and all files imported by the input file.
+*/
 module.exports = function loader(content) {
   const callback = this.async()
   const filename = this.resourcePath

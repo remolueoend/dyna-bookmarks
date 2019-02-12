@@ -35,6 +35,7 @@ export class AppStateBuilder {
   public withSearchTerm(term: string) {
     return this.withBookmarksSearch({
       searchTerm: term,
+      selectedIndex: 0,
     })
   }
 

@@ -8,6 +8,7 @@ describe("components/core/bookmarks-tree/SearchBar", () => {
         value="foo"
         onChange={() => undefined}
         moveNodeSelection={() => undefined}
+        moveResultSelection={() => undefined}
       />,
     )
     expect(tree.find("input").attr("value")).toEqual("foo")

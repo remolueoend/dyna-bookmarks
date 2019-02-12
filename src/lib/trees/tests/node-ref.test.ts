@@ -1,3 +1,4 @@
+import "tests/yarn-extensions"
 import { NodeID, TreeNode } from ".."
 import { NodeRef } from "../node-ref"
 
@@ -191,8 +192,19 @@ describe("node-ref", () => {
         refChildNode11.equals(new NodeRef([childNode12, childNode1, rootNode])),
       ).toBeFalsy()
     })
-    expect(
-      refChildNode11.equals(new NodeRef([childNode11, childNode1])),
-    ).toBeFalsy()
+  })
+  describe("flatten", () => {
+    it("flattens the given node and its nested children breath-first", () => {
+      const flatten = refRootNode.flatten()
+      expect(flatten[0]).toEqualNodeRef(refRootNode)
+      expect(flatten[1]).toEqualNodeRef(new NodeRef([childNode1, rootNode]))
+      expect(flatten[2]).toEqualNodeRef(new NodeRef([childNode2, rootNode]))
+      expect(flatten[3]).toEqualNodeRef(
+        new NodeRef([childNode11, childNode1, rootNode]),
+      )
+      expect(flatten[4]).toEqualNodeRef(
+        new NodeRef([childNode12, childNode1, rootNode]),
+      )
+    })
   })
 })

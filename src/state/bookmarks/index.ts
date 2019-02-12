@@ -1,4 +1,3 @@
-import { TreeNode } from "lib/trees"
 import { combineReducers } from "redux"
 import { bookmarksDataReducer, BookmarksDataState } from "./data"
 import { bookmarksImportReducer, BookmarksImportState } from "./import"

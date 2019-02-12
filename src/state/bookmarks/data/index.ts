@@ -1,13 +1,15 @@
 import { reducer } from "lib/reducer-builder"
-import { TreeNode } from "lib/trees"
+import { NodeRef } from "lib/trees/node-ref"
 import { createAction } from "redux-actions"
 
 export { fetchBookmarksHandler } from "./fetch-bookmarks"
 
-export type BookmarksNode = TreeNode<{
+export interface BookmarkNodeData {
   label: string
   href?: string
-}>
+}
+
+export type BookmarksNode = NodeRef<BookmarkNodeData>
 
 export interface BookmarksDataState {
   rootNode: BookmarksNode | undefined

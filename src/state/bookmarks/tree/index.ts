@@ -25,6 +25,6 @@ export const bookmarksTreeReducer = reducer(initTreeState)
   }))
   .addHandler(updateBookmarks, (state, { payload }) => ({
     ...state,
-    selectedNode: payload!.rootNode.children![0],
+    selectedNode: payload!.rootNode.firstChild(),
   }))
   .getReducer()

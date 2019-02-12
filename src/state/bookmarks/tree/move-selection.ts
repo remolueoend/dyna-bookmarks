@@ -1,5 +1,5 @@
 import { exhaust } from "lib/exhaust"
-import { getNextParentSibling, getNodeIndex, NodeID } from "lib/trees"
+import { NodeID } from "lib/trees"
 import { without } from "ramda"
 import { BookmarksNode } from "../data"
 
@@ -12,13 +12,13 @@ export const moveSelection = (
 ): { selectedNode: BookmarksNode | undefined; expandedNodes: NodeID[] } => {
   // if currently no node is selected or selected node is root (what should never ever happen),
   // we just return the current state as it is:
-  if (!selectedNode || !selectedNode.parentNode) {
+  if (!selectedNode || selectedNode.isRoot) {
     return { selectedNode, expandedNodes }
   }
   const node = selectedNode
-  const parent = selectedNode.parentNode
+  const parent = selectedNode.parent()!
   const expanded = expandedNodes
-  const nodeIndex = getNodeIndex(selectedNode)! // we can use `!` here because selected node has to have a parent
+  const nodeIndex = selectedNode.getIndex()
 
   function moveUp() {
     if (nodeIndex === 0) {
@@ -28,7 +28,7 @@ export const moveSelection = (
       }
     } else {
       return {
-        selectedNode: parent.children![nodeIndex - 1],
+        selectedNode: parent.getNthChild(nodeIndex - 1),
         expandedNodes: expanded,
       }
     }
@@ -38,13 +38,13 @@ export const moveSelection = (
     const childCount = parent.children!.length
     if (expanded.includes(node.id) && node.children && node.children.length) {
       return {
-        selectedNode: node.children[0],
+        selectedNode: node.firstChild(),
         expandedNodes: expanded,
       }
     }
     if (nodeIndex === childCount - 1) {
       // let's try to move to the next sibling of the current parent:
-      const nextParentSilbing = getNextParentSibling(node)
+      const nextParentSilbing = node.parent().getNextSibling()
 
       if (nextParentSilbing) {
         return {
@@ -60,7 +60,7 @@ export const moveSelection = (
     }
 
     return {
-      selectedNode: parent.children![nodeIndex + 1],
+      selectedNode: parent.getNthChild(nodeIndex + 1),
       expandedNodes: expanded,
     }
   }
@@ -88,7 +88,7 @@ export const moveSelection = (
   function moveRight() {
     if (node.children && node.children.length) {
       return {
-        selectedNode: node.children[0],
+        selectedNode: node.firstChild(),
         expandedNodes: [...expanded, node.id],
       }
     } else {

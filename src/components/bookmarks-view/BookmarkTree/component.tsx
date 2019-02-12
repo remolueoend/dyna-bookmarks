@@ -1,5 +1,5 @@
 import { Icon } from "antd"
-import { hasChildren, NodeID } from "lib/trees"
+import { NodeID } from "lib/trees"
 import { BookmarksNode } from "state/bookmarks/data"
 import styled, { css } from "styled-components"
 import { getThemeVar, styledWithProps } from "theme"
@@ -25,15 +25,14 @@ export const BookmarkTree: React.SFC<BookmarkTreeProps> = ({
     <span>No data</span>
   ) : (
     <BookmarkTreeBase style={style} className={className}>
-      {rootNode.children &&
-        rootNode.children.map(child => (
-          <TreeNode
-            key={child.id}
-            node={child}
-            expandedNodes={expandedNodes}
-            selectedNode={selectedNode}
-          />
-        ))}
+      {rootNode.getChildRefs().map(child => (
+        <TreeNode
+          key={child.id}
+          node={child}
+          expandedNodes={expandedNodes}
+          selectedNode={selectedNode}
+        />
+      ))}
     </BookmarkTreeBase>
   )
 
@@ -43,7 +42,9 @@ const NodeWrapper = styled.div`
 const NodeIcon = styled(Icon)`
   margin-right: 5px;
 `
-const NodeLabel = styledWithProps<{ selected: boolean }>()(styled.div)`
+const NodeLabel = styledWithProps<{ selected: boolean; children: any }>()(
+  styled.div,
+)`
   padding: 5px;
   border-radius: 3px;
   cursor: pointer;
@@ -82,14 +83,14 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
       <NodeLabel selected={!!selectedNode && node.id === selectedNode.id}>
         <NodeIcon
           type={
-            hasChildren(node) ? (isExpanded ? "folder-open" : "folder") : "link"
+            node.hasChildren ? (isExpanded ? "folder-open" : "folder") : "link"
           }
         />
         {node.data.label}
       </NodeLabel>
-      {!hasChildren(node) || !isExpanded ? null : (
+      {!node.hasChildren || !isExpanded ? null : (
         <NodeChildrenWrapper>
-          {node.children.map(child => (
+          {node.getChildRefs().map(child => (
             <TreeNode
               style={style}
               className={className}

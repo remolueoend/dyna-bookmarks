@@ -1,72 +1,99 @@
 import { FetchDocumentNode } from "api/fetch-document"
 import { filter } from "fuzzy"
-import { Omit } from "lib/types"
-import { flatten } from "ramda"
+import { Queue } from "lib/queue"
 import { BookmarksNode } from "state/bookmarks/data"
+import { NodeRef } from "./node-ref"
 
+/**
+ * Represents the ID of a node.
+ */
 export type NodeID = string
 
+/**
+ * Describes a raw node without resolved child nodes.
+ * The generic type `T` allows extending the basic type `RawNode` with additional properties.
+ */
 export type RawNode<T> = T & {
   id: NodeID
   children?: NodeID[]
-  text: string
 }
 
+/**
+ * Describes a generic node with resolved references to its children.
+ * The generic type `T` defines the type of data contained by a node.
+ */
 export interface TreeNode<TData> {
   id: NodeID
   children?: Array<TreeNode<TData>>
   data: TData
-  parentNode?: TreeNode<TData>
-}
-export type TreeNodeWithChildren<TData> = Omit<TreeNode<TData>, "children"> & {
-  children: Array<TreeNode<TData>>
 }
 
-export type FlatNodeMap<TData> = Map<NodeID, TreeNode<TData>>
+/**
+ * Describes a map of node IDs to node instances.
+ */
+export type FlatNodeMap<TData> = Map<NodeID, NodeRef<TData>>
 
+/**
+ * Resolves a subtree of the given node ID. Uses `rawNodeMap` as source of raw node data,
+ * `nodeMap` as cache of resolved node instances and `mapData` to construct the node's data structure.
+ *
+ * @param nodeId The ID of the node to resolve.
+ * @param rawNodeMap A map containing all raw node data.
+ * @param nodeMap A map holding already resolved node instances to reuse.
+ * @param [parentPath] Node path of the parent of the node with the given ID.
+ */
 export const resolveNode = <TRaw, TData>(
   nodeId: NodeID,
   rawNodeMap: Map<NodeID, RawNode<TRaw>>,
   nodeMap: FlatNodeMap<TData>,
   mapData: (node: RawNode<TRaw>) => TData,
-  parentNode?: TreeNode<TData>,
-): TreeNode<TData> => {
+  parentNodePath: Array<TreeNode<TData>> = [],
+): NodeRef<TData> => {
+  // get the data of the current node and throw if not available:
   const rawNode = rawNodeMap.get(nodeId)
   if (!rawNode) {
     throw new Error(
       `[lib/trees/resolveNode]: Cannot find node with NodeID ${nodeId}`,
     )
   }
+
+  // construct new node instance without any children:
   const node: TreeNode<TData> = {
     id: rawNode.id,
     data: mapData(rawNode),
-    parentNode,
     children: [],
   }
 
+  const nodePath = [node, ...parentNodePath]
+
+  // resolve children of current node recursively or reuse existing instances
+  // cached in `nodeMap`:
   const childNodes = (rawNode.children || []).map(childId =>
     nodeMap.has(childId)
       ? nodeMap.get(childId)!
-      : resolveNode(childId, rawNodeMap, nodeMap, mapData, node),
+      : resolveNode(childId, rawNodeMap, nodeMap, mapData, nodePath),
   )
   node.children = childNodes
 
-  nodeMap.set(node.id, node)
+  const nodeRef = new NodeRef(nodePath)
+  nodeMap.set(node.id, nodeRef)
 
-  return node
+  return nodeRef
 }
 
+/**
+ * Resolves a tree structure from the given map of tree nodes.
+ * Uses the provided `mapData` function to construct the data property of each node.
+ *
+ * @param nodeMap A map of nodes used as source to build the tree.
+ * @param mapData Function accpeting a node and returning the data for a tree node.
+ */
 export const resolveNodes = <TRaw, TData>(
   nodeMap: Map<NodeID, RawNode<TRaw>>,
   mapData: (node: RawNode<TRaw>) => TData,
 ) => {
-  const nodes = new Map<NodeID, TreeNode<TData>>()
-  const rootNode = resolveNode("root", nodeMap, nodes, mapData)
-
-  return {
-    nodeList: Array.from(nodes.values()),
-    rootNode,
-  }
+  const nodes = new Map<NodeID, NodeRef<TData>>()
+  return resolveNode("root", nodeMap, nodes, mapData)
 }
 
 /**
@@ -76,10 +103,10 @@ export const resolveNodes = <TRaw, TData>(
  * @param nodeList node map to search through.
  * @param searchText text to search for.
  */
-export const searchTree = <TNodeData>(
-  nodeList: Array<TreeNode<TNodeData>>,
+export const searchTree = <TTreeNode>(
+  nodeList: TTreeNode[],
   searchText: string,
-  getSearchContent: (node: TreeNode<TNodeData>) => string,
+  getSearchContent: (node: TTreeNode) => string,
 ) => {
   return filter(searchText, nodeList, {
     extract: node => getSearchContent(node),
@@ -87,17 +114,7 @@ export const searchTree = <TNodeData>(
 }
 
 /**
- * Returns if the given node has at least one child.
- *
- * @param node the parent node
- */
-export const hasChildren = <TData>(
-  node: TreeNode<TData>,
-): node is TreeNodeWithChildren<TData> =>
-  !!node.children && !!node.children.length
-
-/**
- * Flattens a tree starting with the given root node and returns a flat array of nodes.
+ * Flattens a tree breath-first starting with the given root node and returns a flat array of nodes.
  *
  * @param rootNode the current root node to start with.
  * @param getChildren function returning all children of a given node.
@@ -105,13 +122,24 @@ export const hasChildren = <TData>(
 export const flattenTree = <TTree>(
   rootNode: TTree,
   getChildren: (node: TTree) => TTree[],
-): TTree[] => [
-  rootNode,
-  ...flatten(
-    getChildren(rootNode).map(child => flattenTree(child, getChildren)),
-  ),
-]
+): TTree[] => {
+  const nodeQueue = new Queue<TTree>(rootNode)
+  const result: TTree[] = []
+  while (!nodeQueue.isEmpty()) {
+    const current = nodeQueue.dequeue()
+    nodeQueue.enqueue(...getChildren(current))
+    result.push(current)
+  }
 
+  return result
+}
+
+/**
+ * Returns whether the given string is a valid url.
+ * Makes use of the browser's URL constructor.
+ *
+ * @param url string to validate
+ */
 export const isValidUrl = (url: string) => {
   try {
     const parsedUrl = new URL(url)
@@ -121,7 +149,15 @@ export const isValidUrl = (url: string) => {
   }
 }
 
+/**
+ * Regex used to parse the content of a dynalist document node for markdown url patterns.
+ */
 const parseContentNodeRegex = /\[(.*)\]\((.*)\)/
+/**
+ * Returns a label and optionally a href (url) parsed from the given node's content.
+ *
+ * @param node The node to parse.
+ */
 export const parseNodeContent = (
   node: FetchDocumentNode,
 ): { label: string; href?: string } => {
@@ -138,56 +174,9 @@ export const parseNodeContent = (
 }
 
 /**
- * Returns a string array of path elements to the given node.
+ * Returns a string array of all labels of the given node's path, including the node itself.
  *
  * @param node the node to get the path from.
  */
 export const getBookmarkPath = (node: BookmarksNode) =>
-  getParentNodes(node).map(n => n.data.label)
-
-/**
- * Returns an ascending list of all parent nodes of the given node.
- *
- * @param node The node to get the list of parent from.
- */
-export const getParentNodes = <TData>(
-  node: TreeNode<TData>,
-): Array<TreeNode<TData>> =>
-  node.parentNode ? [...getParentNodes(node.parentNode), node.parentNode] : []
-
-/**
- * Returns the child index (0 based) of the given node relative to its direct children.
- * Returns undefined if the current node has no parent.
- *
- * @param node the node to get the index for
- */
-export const getNodeIndex = <TData>(node: TreeNode<TData>) =>
-  node.parentNode &&
-  (node.parentNode.children || []).findIndex(child => child.id === node.id)
-
-/**
- * Returns the next sibling of a node, if available, else undefined
- *
- * @param node The node to get the parent from
- */
-export const getNextSibling = <TData>(node: TreeNode<TData>) =>
-  !node.parentNode
-    ? undefined
-    : node.parentNode.children![getNodeIndex(node)! + 1]
-
-/**
- * Returns the next sibling of the given node's parent.
- *
- * @param node the current node
- */
-export const getNextParentSibling = (
-  node: BookmarksNode | undefined,
-): typeof node => {
-  if (!node || !node.parentNode || !node.parentNode.parentNode) {
-    return undefined
-  }
-
-  return (
-    getNextSibling(node.parentNode) || getNextParentSibling(node.parentNode)
-  )
-}
+  node.path.reverse().map(n => n.data.label)

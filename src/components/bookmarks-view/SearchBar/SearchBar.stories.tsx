@@ -8,12 +8,14 @@ storiesOf("bookmarks-view/SearchBar", module).add("default view", () => {
   const ValueState = withState("value", "setValue", "")(
     ({ setValue, value }) => (
       <SearchBar
-        onChange={e => {
+        // tslint:disable:only-arrow-functions
+        onChange={function(e) {
           onChangeAction(...arguments)
           setValue(e)
         }}
         value={value}
         moveNodeSelection={() => undefined}
+        moveResultSelection={() => undefined}
       />
     ),
   )
