@@ -21,7 +21,9 @@ export interface SearchBarProps extends Pick<Required<SearchProps>, "value"> {
   moveResultSelection: (dir: "up" | "down") => void
   inputRef?: RefObject<Search>
   selectedNode: BookmarksNode | undefined
+  selectedSearchResultNode: BookmarksNode | undefined
   expandedNodes: NodeID[]
+  onNodeSelect: (node: BookmarksNode, openInNewTab: boolean) => void
 }
 
 const SearchBarBase = styled.div``
@@ -37,10 +39,32 @@ export class SearchBar extends PureComponent<SearchBarProps> {
           onChange={e => onChange(e.target.value)}
           onKeyDown={this.onKeyDown}
           value={value}
+          onSearch={this.onSearch}
           placeholder="search bookmarks"
         />
       </SearchBarBase>
     )
+  }
+
+  protected onSearch = (
+    _: string,
+    e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    const {
+      onNodeSelect,
+      value,
+      selectedNode,
+      selectedSearchResultNode,
+    } = this.props
+
+    const node =
+      !!value && !!value.toString().length
+        ? selectedSearchResultNode
+        : selectedNode
+
+    if (!!node) {
+      onNodeSelect(node, !!e && e.metaKey)
+    }
   }
 
   protected onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

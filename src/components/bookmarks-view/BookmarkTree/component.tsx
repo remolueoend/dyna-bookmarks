@@ -10,6 +10,9 @@ export interface BookmarkTreeProps {
   rootNode: BookmarksNode | undefined
   expandedNodes: NodeID[]
   selectedNode?: BookmarksNode
+  onNodeSelect: (node: BookmarksNode, openInNewTab: boolean) => void
+  addExpandedNode: (nodeId: NodeID) => void
+  removeExpandedNode: (nodeId: NodeID) => void
 }
 
 const BookmarkTreeBase = styled.div``
@@ -20,6 +23,9 @@ export const BookmarkTree: React.SFC<BookmarkTreeProps> = ({
   rootNode,
   expandedNodes,
   selectedNode,
+  onNodeSelect: onSelect,
+  addExpandedNode,
+  removeExpandedNode,
 }) =>
   !rootNode ? (
     <span>No data</span>
@@ -31,6 +37,9 @@ export const BookmarkTree: React.SFC<BookmarkTreeProps> = ({
           node={child}
           expandedNodes={expandedNodes}
           selectedNode={selectedNode}
+          onClick={(node, e) => onSelect(node, e.metaKey)}
+          addExpandedNode={addExpandedNode}
+          removeExpandedNode={removeExpandedNode}
         />
       ))}
     </BookmarkTreeBase>
@@ -41,6 +50,7 @@ const NodeWrapper = styled.div`
 `
 const NodeIcon = styled(Icon)`
   margin-right: 5px;
+  cursor: pointer;
 `
 const NodeLabel = styledWithProps<{ selected: boolean; children: any }>()(
   styled.div,
@@ -69,6 +79,9 @@ export interface TreeNodeProps {
   node: BookmarksNode
   expandedNodes: NodeID[]
   selectedNode?: BookmarksNode
+  onClick?: (node: BookmarksNode, e: React.MouseEvent<HTMLSpanElement>) => void
+  addExpandedNode: (nodeId: NodeID) => void
+  removeExpandedNode: (nodeId: NodeID) => void
 }
 export const TreeNode: React.SFC<TreeNodeProps> = ({
   style,
@@ -76,12 +89,18 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
   node,
   expandedNodes,
   selectedNode,
+  onClick,
+  addExpandedNode,
+  removeExpandedNode,
 }) => {
   const isExpanded = expandedNodes.includes(node.id)
   return (
     <NodeWrapper>
       <NodeLabel selected={!!selectedNode && node.id === selectedNode.id}>
         <NodeIcon
+          onClick={() =>
+            isExpanded ? removeExpandedNode(node.id) : addExpandedNode(node.id)
+          }
           type={
             // show folder icon if a node has no url but also no children (kind of empty folder):
             node.hasChildren || !node.data.href
@@ -91,7 +110,9 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
               : "link"
           }
         />
-        {node.data.label}
+        <span onClick={onClick && (e => onClick(node, e))}>
+          {node.data.label}
+        </span>
       </NodeLabel>
       {!node.hasChildren || !isExpanded ? null : (
         <NodeChildrenWrapper>
@@ -102,6 +123,9 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
               node={child}
               expandedNodes={expandedNodes}
               selectedNode={selectedNode}
+              onClick={onClick}
+              addExpandedNode={addExpandedNode}
+              removeExpandedNode={removeExpandedNode}
             />
           ))}
         </NodeChildrenWrapper>

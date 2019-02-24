@@ -8,5 +8,5 @@ export interface AddBookmarkViewProps {
 const AddBookmarkViewBase = styled.div``
 
 export const AddBookmarkView: React.SFC<AddBookmarkViewProps> = ({}) => (
-  <AddBookmarkViewBase />
+  <AddBookmarkViewBase>Add bookmark</AddBookmarkViewBase>
 )

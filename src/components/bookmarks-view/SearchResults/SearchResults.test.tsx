@@ -3,7 +3,13 @@ import { SearchResults } from "./component"
 
 describe("components/bookmarks-view/SearchResults", () => {
   it.skip("renders correctly", () => {
-    const tree = render(<SearchResults results={[]} selectedIndex={0} />)
+    const tree = render(
+      <SearchResults
+        results={[]}
+        selectedIndex={0}
+        onNodeSelect={() => undefined}
+      />,
+    )
     expect(tree).toBeFalsy()
   })
 })

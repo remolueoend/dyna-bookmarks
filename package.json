@@ -13,7 +13,7 @@
     "build": "webpack --optimize-minimize --mode production && web-ext lint && web-ext build",
     "build.watch": "webpack -w",
     "start": "web-ext run",
-    "dev": "yarn build && run-p build.watch start",
+    "dev": "run-p build.watch start",
     "lint": "tslint --project .",
     "lint.fix": "yarn lint --fix",
     "test": "jest",

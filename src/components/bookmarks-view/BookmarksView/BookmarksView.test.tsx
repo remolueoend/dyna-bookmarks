@@ -7,7 +7,7 @@ describe("components/bookmarks-view/BookmarksView", () => {
   it.skip("renders correctly", () => {
     const tree = render(
       <Provider store={createStore()}>
-        <BookmarksView />
+        <BookmarksView onSelect={() => undefined} />
       </Provider>,
     )
     expect(tree).toBeFalsy()

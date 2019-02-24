@@ -1,4 +1,5 @@
 import { Icon } from "components/core/Icon"
+import { ViewToggleIcon } from "components/ViewToggleIcon"
 import styled from "styled-components"
 
 export interface TitleBarProps {
@@ -30,5 +31,6 @@ export const TitleBar: React.SFC<TitleBarProps> = ({
       loading={importRunning}
       onClick={() => importBookmarks()}
     />
+    <ViewToggleIcon />
   </TitleBarBase>
 )

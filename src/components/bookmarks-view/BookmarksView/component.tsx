@@ -1,5 +1,6 @@
 import Search from "antd/lib/input/Search"
 import { RefObject } from "react"
+import { BookmarksNode } from "state/bookmarks/data"
 import styled from "styled-components"
 import { BookmarkTree } from "../BookmarkTree"
 import { SearchBar } from "../SearchBar"
@@ -10,6 +11,7 @@ export interface BookmarksViewProps {
   className?: string
   hasSearchTerm?: boolean
   searchInputRef?: RefObject<Search>
+  onSelect: (node: BookmarksNode, openInNewTab: boolean) => void
 }
 
 const BookmarksViewBase = styled.div``
@@ -19,9 +21,14 @@ export const BookmarksView: React.SFC<BookmarksViewProps> = ({
   className,
   hasSearchTerm,
   searchInputRef,
+  onSelect,
 }) => (
   <BookmarksViewBase className={className} style={style}>
-    <SearchBar inputRef={searchInputRef} />
-    {hasSearchTerm ? <SearchResults /> : <BookmarkTree />}
+    <SearchBar inputRef={searchInputRef} onNodeSelect={onSelect} />
+    {hasSearchTerm ? (
+      <SearchResults onNodeSelect={onSelect} />
+    ) : (
+      <BookmarkTree onNodeSelect={onSelect} />
+    )}
   </BookmarksViewBase>
 )

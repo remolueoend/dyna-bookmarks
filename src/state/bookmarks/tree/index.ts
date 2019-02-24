@@ -1,5 +1,6 @@
 import { reducer } from "lib/reducer-builder"
 import { NodeID } from "lib/trees"
+import { remove, without } from "ramda"
 import { createAction } from "redux-actions"
 import { updateBookmarks } from "../data"
 
@@ -24,6 +25,15 @@ export const changeNodeSelection = createAction(
   }),
 )
 
+export const addExpandedNode = createAction(
+  "tree/add-expanded-node",
+  (nodeId: NodeID) => nodeId,
+)
+export const removeExpandedNode = createAction(
+  "tree/remove-expanded-node",
+  (nodeId: NodeID) => nodeId,
+)
+
 export const bookmarksTreeReducer = reducer(initTreeState)
   /**
    * Handler for updating the NodeID of the currently selected node.
@@ -41,5 +51,13 @@ export const bookmarksTreeReducer = reducer(initTreeState)
     // move selection to first child of root as soon as nodes are updated:
     selectedNode:
       payload![0] && payload![0].children && payload![0].children![0],
+  }))
+  .addHandler(addExpandedNode, (state, { payload }) => ({
+    ...state,
+    expandedNodes: [...state.expandedNodes, payload!],
+  }))
+  .addHandler(removeExpandedNode, (state, { payload }) => ({
+    ...state,
+    expandedNodes: without([payload!], state.expandedNodes),
   }))
   .getReducer()

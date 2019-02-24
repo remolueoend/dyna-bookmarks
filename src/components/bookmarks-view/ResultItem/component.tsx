@@ -1,7 +1,8 @@
+import { HTMLAttributes } from "react"
 import styled, { css } from "styled-components"
 import { getThemeVar, styledWithProps } from "theme"
 
-export interface ResultItemProps {
+export interface ResultItemProps extends HTMLAttributes<HTMLDivElement> {
   title: string
   url?: string
   path: string[]
@@ -27,7 +28,9 @@ const FlexBox = styled.div`
   align-items: baseline;
 `
 
-const ResultItemBase = styledWithProps<{ selected: boolean }>()(styled.div)`
+const ResultItemBase = styledWithProps<
+  { selected: boolean } & HTMLAttributes<HTMLDivElement>
+>()(styled.div)`
   width: 100%;
   overflow: hidden;
   padding: 0 5px;
@@ -52,8 +55,9 @@ export const ResultItem: React.SFC<ResultItemProps> = ({
   url,
   path,
   selected,
+  ...rootDivProps
 }) => (
-  <ResultItemBase selected={selected}>
+  <ResultItemBase selected={selected} {...rootDivProps}>
     <FlexBox>
       <Title>{title}</Title>
       <Url>{url}</Url>

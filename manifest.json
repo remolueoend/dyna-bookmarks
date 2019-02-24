@@ -2,7 +2,7 @@
   "icons": {
     "48": "assets/border-48.png"
   },
-  "permissions": ["bookmarks", "activeTab", "<all_urls>"],
+  "permissions": ["bookmarks", "activeTab", "tabs", "<all_urls>"],
 
   "browser_action": {
     "default_icon": "assets/border-48.png",
@@ -12,11 +12,19 @@
   "background": {
     "page": "background.html"
   },
-  "web_accessible_resources": [
-    "beasts/frog.jpg",
-    "beasts/turtle.jpg",
-    "beasts/snake.jpg",
-    "popup.js.map",
-    "background.js.map"
-  ]
+  "web_accessible_resources": ["popup.js.map", "background.js.map"],
+  "commands": {
+    "explore_bookmarks": {
+      "suggested_key": {
+        "default": "Alt+Shift+B"
+      },
+      "description": "Opens dynalist bookmark explorer."
+    },
+    "add_bookmark": {
+      "suggested_key": {
+        "default": "Alt+Shift+N"
+      },
+      "description": "Adds current page to dynalist bookmarks."
+    }
+  }
 }

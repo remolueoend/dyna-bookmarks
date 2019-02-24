@@ -1,18 +1,22 @@
 import { Icon as AntdIcon } from "antd"
 import { IconProps as AntIconProps } from "antd/lib/icon/index"
 import styled from "styled-components"
-import { getThemeVar } from "theme"
+import { getThemeVar, styledWithProps } from "theme"
 
 export interface IconProps extends AntIconProps {
   loading?: boolean
+  highlighted?: boolean
 }
 
-const IconBase = styled(AntdIcon)`
+const IconBase = styledWithProps<{ highlighted?: boolean } & IconProps>()(
+  styled(AntdIcon),
+)`
   cursor: pointer;
 
   > svg {
     transition: fill 0.2s ease-in-out;
-    fill: ${getThemeVar("normal-color")};
+    fill: ${({ highlighted }) =>
+      getThemeVar(highlighted ? "primary-color" : "normal-color")};
   }
   &:hover {
     > svg {
@@ -21,6 +25,14 @@ const IconBase = styled(AntdIcon)`
   }
 `
 
-export const Icon: React.SFC<IconProps> = ({ loading, ...props }) => (
-  <IconBase {...props} type={loading ? "loading" : props.type} />
+export const Icon: React.SFC<IconProps> = ({
+  loading,
+  highlighted,
+  ...props
+}) => (
+  <IconBase
+    {...props}
+    type={loading ? "loading" : props.type}
+    highlighted={highlighted}
+  />
 )

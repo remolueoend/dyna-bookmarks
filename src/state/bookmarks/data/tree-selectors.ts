@@ -1,4 +1,5 @@
 import { FetchDocumentNode } from "api/fetch-document"
+import { stat } from "fs"
 import { getBookmarkPath, NodeID, searchTree } from "lib/trees"
 import { createSelector } from "reselect"
 import { AppState } from "root-reducer"
@@ -86,4 +87,19 @@ export const searchResultSelector = createSelector<
 
     return !showLinksOnly ? results : results.filter(n => !!n.data.href)
   },
+)
+
+/**
+ * Global reselect selector returning the instance of the currently selected node
+ * in the search result view based on the given redux state.
+ */
+export const selectedSearchResultNodeSelector = createSelector<
+  AppState,
+  number,
+  BookmarksNode[],
+  BookmarksNode
+>(
+  state => state.bookmarks.search.selectedIndex,
+  searchResultSelector,
+  (selectedIndex, results) => results[selectedIndex],
 )

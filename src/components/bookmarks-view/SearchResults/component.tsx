@@ -9,6 +9,7 @@ export interface SearchResultsProps {
   className?: string
   results: BookmarksNode[]
   selectedIndex: number
+  onNodeSelect: (node: BookmarksNode, openInNewTab: boolean) => void
 }
 
 const StyledListItem = styled(List.Item)`
@@ -30,6 +31,7 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
   className,
   results,
   selectedIndex,
+  onNodeSelect: onSelect,
 }) => {
   return (
     <SearchResultsBase className={className} style={style}>
@@ -44,6 +46,7 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
           return (
             <StyledListItem>
               <ResultItem
+                onClick={e => onSelect(node, e.metaKey)}
                 selected={
                   index ===
                   (selectedIndex >= 0
