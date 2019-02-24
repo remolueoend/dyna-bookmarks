@@ -1,5 +1,6 @@
 import { StoryDecorator } from "@storybook/react"
 import { Provider } from "react-redux"
+import { composeWithDevTools } from "redux-devtools-extension"
 import { createStore } from "redux-store"
 import { appState } from "tests/state-builder"
 

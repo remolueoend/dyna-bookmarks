@@ -1,5 +1,5 @@
 import { filter } from "fuzzy"
-import { equals, head, tail } from "ramda"
+import { equals, head, reverse, tail } from "ramda"
 import { flattenTree, TreeNode } from "."
 
 /**
@@ -306,8 +306,7 @@ export class NodeRef<TData> implements TreeNode<TData> {
    * The returned ID contains all node IDs of the current node's path.
    */
   public uuid() {
-    return this.path
-      .reverse()
+    return reverse(this.path)
       .map(n => n.id)
       .join("/")
   }

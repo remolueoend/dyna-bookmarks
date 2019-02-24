@@ -5,6 +5,8 @@ import { AppState } from "root-reducer"
 import { BookmarksNode, ParsedTreeInfo } from "."
 import { resolveFetchedNodes } from "./fetch-bookmarks"
 
+const EMPTY_RESULTS: BookmarksNode[] = []
+
 /**
  * Global reselect selector returning parsed node tree infos
  * from a given redux state.
@@ -79,10 +81,8 @@ export const searchResultSelector = createSelector<
   (showLinksOnly, searchTerm, nodes) => {
     const results =
       !searchTerm || !nodes.length
-        ? []
-        : searchTree(nodes, searchTerm, node =>
-            [...getBookmarkPath(node), node.data.label].join("/"),
-          )
+        ? EMPTY_RESULTS
+        : searchTree(nodes, searchTerm, node => getBookmarkPath(node).join("/"))
 
     return !showLinksOnly ? results : results.filter(n => !!n.data.href)
   },

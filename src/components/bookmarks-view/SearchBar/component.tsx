@@ -1,8 +1,11 @@
 import { Input } from "antd"
 import { SearchProps } from "antd/es/input/Search"
 import Search from "antd/lib/input/Search"
+import { getArrowKeyDirection } from "lib/keyboard"
+import { NodeID } from "lib/trees"
 import { KeyboardEvent, PureComponent, RefObject } from "react"
-import { MoveNodeSelectionDir } from "state/bookmarks/tree/move-selection"
+import { BookmarksNode } from "state/bookmarks/data"
+import { moveSelection } from "state/bookmarks/tree/move-selection"
 import styled from "styled-components"
 
 const SearchInput = Input.Search
@@ -11,9 +14,14 @@ export interface SearchBarProps extends Pick<Required<SearchProps>, "value"> {
   style?: {}
   className?: string
   onChange: (term: string) => void
-  moveNodeSelection: (dir: MoveNodeSelectionDir) => void
+  changeNodeSelection: (
+    selectedNode: NodeID | undefined,
+    expandedNodes: NodeID[],
+  ) => void
   moveResultSelection: (dir: "up" | "down") => void
   inputRef?: RefObject<Search>
+  selectedNode: BookmarksNode | undefined
+  expandedNodes: NodeID[]
 }
 
 const SearchBarBase = styled.div``
@@ -36,24 +44,31 @@ export class SearchBar extends PureComponent<SearchBarProps> {
   }
 
   protected onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const {
+      changeNodeSelection,
+      moveResultSelection,
+      selectedNode,
+      expandedNodes,
+    } = this.props
+
+    const pressedDirection = getArrowKeyDirection(e.keyCode)
+    // do nothing if not an arrow key was pressed:
+    if (typeof pressedDirection === "undefined") {
+      return
+    }
+
     if (!e.currentTarget.value) {
-      switch (e.keyCode) {
-        case 37:
-          return this.props.moveNodeSelection("left")
-        case 38:
-          return this.props.moveNodeSelection("up")
-        case 39:
-          return this.props.moveNodeSelection("right")
-        case 40:
-          return this.props.moveNodeSelection("down")
-      }
-    } else {
-      switch (e.keyCode) {
-        case 38:
-          return this.props.moveResultSelection("up")
-        case 40:
-          return this.props.moveResultSelection("down")
-      }
+      const {
+        expandedNodes: newExpandedNodes,
+        selectedNode: newSelectedNode,
+      } = moveSelection(selectedNode, expandedNodes, pressedDirection)
+      changeNodeSelection(
+        newSelectedNode && newSelectedNode.id,
+        newExpandedNodes,
+      )
+      // only handle up and down keys in search results:
+    } else if (pressedDirection === "up" || pressedDirection === "down") {
+      moveResultSelection(pressedDirection)
     }
   }
 }

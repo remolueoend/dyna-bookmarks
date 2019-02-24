@@ -30,31 +30,36 @@ export const SearchResults: React.SFC<SearchResultsProps> = ({
   className,
   results,
   selectedIndex,
-}) => (
-  <SearchResultsBase className={className} style={style}>
-    <List
-      locale={{
-        emptyText: "no bookmarks found",
-      }}
-      size={"small"}
-      dataSource={results}
-      renderItem={(node: BookmarksNode, index: number) => (
-        <StyledListItem>
-          <ResultItem
-            selected={
-              index ===
-              (selectedIndex >= 0
-                ? selectedIndex % results.length
-                : results.length -
-                  1 -
-                  ((Math.abs(selectedIndex) - 1) % results.length))
-            }
-            title={node.data.label}
-            url={node.data.href}
-            path={getBookmarkPath(node)}
-          />
-        </StyledListItem>
-      )}
-    />
-  </SearchResultsBase>
-)
+}) => {
+  return (
+    <SearchResultsBase className={className} style={style}>
+      <List
+        locale={{
+          emptyText: "no bookmarks found",
+        }}
+        size={"small"}
+        dataSource={results}
+        rowKey={(node: BookmarksNode) => node.id}
+        renderItem={(node: BookmarksNode, index: number) => {
+          return (
+            <StyledListItem>
+              <ResultItem
+                selected={
+                  index ===
+                  (selectedIndex >= 0
+                    ? selectedIndex % results.length
+                    : results.length -
+                      1 -
+                      ((Math.abs(selectedIndex) - 1) % results.length))
+                }
+                title={node.data.label}
+                url={node.data.href}
+                path={getBookmarkPath(node)}
+              />
+            </StyledListItem>
+          )
+        }}
+      />
+    </SearchResultsBase>
+  )
+}

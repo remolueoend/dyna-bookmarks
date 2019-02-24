@@ -83,7 +83,12 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
       <NodeLabel selected={!!selectedNode && node.id === selectedNode.id}>
         <NodeIcon
           type={
-            node.hasChildren ? (isExpanded ? "folder-open" : "folder") : "link"
+            // show folder icon if a node has no url but also no children (kind of empty folder):
+            node.hasChildren || !node.data.href
+              ? isExpanded
+                ? "folder-open"
+                : "folder"
+              : "link"
           }
         />
         {node.data.label}

@@ -15,7 +15,7 @@ export const setSearchTerm = createAction(
   (term: string) => term,
 )
 export const moveResultSelection = createAction(
-  "bookmarks/serch/move-selection",
+  "bookmarks/search/move-selection",
   (dir: "up" | "down") => dir,
 )
 

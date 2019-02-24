@@ -9,7 +9,7 @@ import {
 } from "state/bookmarks/data"
 import { bookmarksImportInitState } from "state/bookmarks/import"
 import { BookmarksSearchState, initSearchState } from "state/bookmarks/search"
-import { initTreeState } from "state/bookmarks/tree"
+import { BookmarksTreeState, initTreeState } from "state/bookmarks/tree"
 import { initViewState } from "state/view"
 
 const initialAppState: AppState = {
@@ -41,6 +41,15 @@ export class AppStateBuilder {
 
   public get() {
     return this.state
+  }
+  public withBookmarksTreeState(state: Partial<BookmarksTreeState>) {
+    return this.withBookmarksState({
+      ...this.state.bookmarks,
+      tree: {
+        ...this.state.bookmarks.tree,
+        ...state,
+      },
+    })
   }
 
   protected withBookmarksState(state: BookmarksState) {

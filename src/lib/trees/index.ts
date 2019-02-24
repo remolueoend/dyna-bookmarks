@@ -1,6 +1,7 @@
 import { FetchDocumentNode } from "api/fetch-document"
 import { filter } from "fuzzy"
 import { Queue } from "lib/queue"
+import { reverse } from "ramda"
 import { BookmarksNode } from "state/bookmarks/data"
 import { NodeRef } from "./node-ref"
 
@@ -110,7 +111,7 @@ export const searchTree = <TTreeNode>(
   getSearchContent: (node: TTreeNode) => string,
 ) => {
   return filter(searchText, nodeList, {
-    extract: node => getSearchContent(node),
+    extract: getSearchContent,
   }).map(result => result.original)
 }
 
@@ -175,9 +176,9 @@ export const parseNodeContent = (
 }
 
 /**
- * Returns a string array of all labels of the given node's path, including the node itself.
+ * Returns a string array of all labels of the given node's path, excluding the node itself.
  *
  * @param node the node to get the path from.
  */
 export const getBookmarkPath = (node: BookmarksNode) =>
-  node.path.reverse().map(n => n.data.label)
+  reverse(node.path).map(n => n.data.label)
