@@ -1,4 +1,6 @@
+import { FetchDocumentNode } from "api/fetch-document"
 import { reducer } from "lib/reducer-builder"
+import { NodeID } from "lib/trees"
 import { NodeRef } from "lib/trees/node-ref"
 import { createAction } from "redux-actions"
 
@@ -10,27 +12,24 @@ export interface BookmarkNodeData {
 }
 
 export type BookmarksNode = NodeRef<BookmarkNodeData>
+export type BookmarksNodeMap = Map<NodeID, BookmarksNode>
+export type ParsedTreeInfo = [BookmarksNode | undefined, BookmarksNodeMap]
 
 export interface BookmarksDataState {
-  rootNode: BookmarksNode | undefined
-  nodeList: BookmarksNode[] | undefined
+  nodes: FetchDocumentNode[]
   loading: boolean
   error?: string
 }
 
 export const initialDataState: BookmarksDataState = {
   loading: false,
-  rootNode: undefined,
-  nodeList: undefined,
+  nodes: [],
 }
 
 export const fetchBookmarks = createAction("bookmarks/fetch-bookmarks")
 export const updateBookmarks = createAction(
   "bookmarks/update-bookmarks",
-  (rootNode: BookmarksNode, nodeList: BookmarksNode[]) => ({
-    rootNode,
-    nodeList,
-  }),
+  (nodes: FetchDocumentNode[]) => nodes,
 )
 export const setBookmarksError = createAction(
   "bookmarks/set-bookmarks-error",
@@ -46,14 +45,12 @@ export const bookmarksDataReducer = reducer(initialDataState)
   .addHandler(updateBookmarks, (state, { payload }) => ({
     ...state,
     loading: false,
-    rootNode: payload!.rootNode,
-    nodeList: payload!.nodeList,
+    nodes: payload!,
     error: undefined,
   }))
   .addHandler(setBookmarksError, (state, { payload }) => ({
     ...state,
     loading: false,
-    children: [],
     error: payload!,
   }))
   .getReducer()

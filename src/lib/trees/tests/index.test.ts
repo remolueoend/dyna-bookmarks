@@ -9,14 +9,14 @@ describe("resolveNodes", () => {
     ["child12", { children: [], id: "child12" }],
   ])
   it("returns the correct reference to root", () => {
-    const rootNode = resolveNodes(nodes, () => ({ foo: 1 }))
+    const [rootNode] = resolveNodes(nodes, () => ({ foo: 1 }))
 
     expect(rootNode.id).toEqual("root")
     expect(rootNode.data).toEqual({ foo: 1 })
   })
 
   it("resolves child nodes correctly", () => {
-    const rootNode = resolveNodes(nodes, () => ({}))
+    const [rootNode] = resolveNodes(nodes, () => ({}))
 
     const child1 = rootNode.children![0]
     const child2 = rootNode.children![1]
@@ -37,7 +37,7 @@ describe("resolveNodes", () => {
   })
 
   it("resolves the node path of each node correctly", () => {
-    const rootNode = resolveNodes(nodes, () => ({}))
+    const [rootNode] = resolveNodes(nodes, () => ({}))
 
     const child1 = rootNode.firstChild()!
     const child2 = rootNode.getNthChild(1)!

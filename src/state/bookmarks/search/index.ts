@@ -1,9 +1,5 @@
 import { reducer } from "lib/reducer-builder"
-import { getBookmarkPath, searchTree } from "lib/trees"
 import { createAction } from "redux-actions"
-import { createSelector } from "reselect"
-import { AppState } from "root-reducer"
-import { BookmarksNode } from "../data"
 
 export interface BookmarksSearchState {
   searchTerm?: string
@@ -21,27 +17,6 @@ export const setSearchTerm = createAction(
 export const moveResultSelection = createAction(
   "bookmarks/serch/move-selection",
   (dir: "up" | "down") => dir,
-)
-
-export const searchResultsSelector = createSelector<
-  AppState,
-  string | undefined,
-  BookmarksNode[] | undefined,
-  boolean,
-  BookmarksNode[]
->(
-  state => state.bookmarks.search.searchTerm,
-  state => state.bookmarks.data.nodeList,
-  state => state.view.showLinksOnly,
-  (searchTerm, nodeList, showLinksOnly) => {
-    const results =
-      !searchTerm || !nodeList
-        ? []
-        : searchTree(nodeList || [], searchTerm, node =>
-            [...getBookmarkPath(node), node.data.label].join("/"),
-          )
-    return !showLinksOnly ? results : results.filter(n => !!n.data.href)
-  },
 )
 
 export const bookmarksSearchReducer = reducer(initSearchState)

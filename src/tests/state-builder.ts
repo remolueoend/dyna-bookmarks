@@ -1,4 +1,5 @@
 // tslint:disable:max-classes-per-file
+import { FetchDocumentNode } from "api/fetch-document"
 import { AppState } from "root-reducer"
 import { BookmarksState } from "state/bookmarks"
 import {
@@ -24,12 +25,11 @@ const initialAppState: AppState = {
 export class AppStateBuilder {
   constructor(protected state = initialAppState) {}
 
-  public withBookmarks(nodeList: BookmarksNode[], rootNode: BookmarksNode) {
+  public withBookmarks(nodes: FetchDocumentNode[]) {
     return this.withBookmarksData({
       error: undefined,
       loading: false,
-      nodeList,
-      rootNode,
+      nodes,
     })
   }
   public withSearchTerm(term: string) {

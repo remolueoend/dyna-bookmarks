@@ -3,9 +3,29 @@ import { createAsyncHandlerFor } from "lib/redux-async"
 import { NodeID, parseNodeContent, resolveNodes } from "lib/trees"
 import { fetchBookmarks, updateBookmarks } from "."
 
-export const resolveRawNodes = (nodeMap: Map<NodeID, FetchDocumentNode>) =>
-  resolveNodes(nodeMap, node => parseNodeContent(node))
+/**
+ * Returns a parsed node tree (root node ref) for the given list
+ * of fetched raw nodes.
+ *
+ * @param fetchedNodes List of fetched nodes to parse.
+ */
+export const resolveFetchedNodes = (fetchedNodes: FetchDocumentNode[]) => {
+  const nodeMap = new Map(
+    fetchedNodes.map(node => [node.id, node] as [NodeID, FetchDocumentNode]),
+  )
 
+  if (!nodeMap.has("root")) {
+    throw new Error(
+      "[state/bookmarks/data/fetch-bookmarks:resolvedFetchedNodes]: No node with ID `root` given.",
+    )
+  }
+
+  return resolveNodes(nodeMap, node => parseNodeContent(node))
+}
+
+/**
+ * Async action handler fetching and loading nodes from dynalist into redux state.
+ */
 export const fetchBookmarksHandler = createAsyncHandlerFor(
   fetchBookmarks,
   async (_, dispatch) => {
@@ -14,13 +34,6 @@ export const fetchBookmarksHandler = createAsyncHandlerFor(
       "EaD2w6adnlYW6Chvgiv6uElb",
     )
 
-    const nodeMap = new Map(
-      documentContent.nodes.map(
-        node => [node.id, node] as [NodeID, FetchDocumentNode],
-      ),
-    )
-    const rootNode = resolveRawNodes(nodeMap)
-
-    dispatch(updateBookmarks(rootNode, rootNode.flatten()))
+    dispatch(updateBookmarks(documentContent.nodes))
   },
 )

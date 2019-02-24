@@ -1,9 +1,9 @@
 import { connect } from "react-redux"
 import { AppState } from "root-reducer"
-import { searchResultsSelector } from "state/bookmarks/search"
+import { searchResultSelector } from "state/bookmarks/data/tree-selectors"
 import { SearchResults } from "./component"
 
 export const SearchResultsContainer = connect((state: AppState) => ({
-  results: searchResultsSelector(state),
+  results: searchResultSelector(state),
   selectedIndex: state.bookmarks.search.selectedIndex || 0,
 }))(SearchResults)

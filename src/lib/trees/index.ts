@@ -93,7 +93,8 @@ export const resolveNodes = <TRaw, TData>(
   mapData: (node: RawNode<TRaw>) => TData,
 ) => {
   const nodes = new Map<NodeID, NodeRef<TData>>()
-  return resolveNode("root", nodeMap, nodes, mapData)
+  const root = resolveNode("root", nodeMap, nodes, mapData)
+  return [root, nodes] as [typeof root, typeof nodes]
 }
 
 /**

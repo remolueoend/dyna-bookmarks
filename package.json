@@ -25,6 +25,7 @@
     "@babel/preset-react": "^7.0.0",
     "@storybook/addon-actions": "^4.1.4",
     "@storybook/react": "^4.1.4",
+    "@storybook/storybook-deployer": "^2.8.1",
     "@types/enzyme": "^3.1.15",
     "@types/faker": "^4.1.4",
     "@types/firefox-webext-browser": "^64.0.0",

@@ -2,7 +2,7 @@ import { FetchDocumentNode } from "api/fetch-document"
 import { internet, lorem, random, seed } from "faker"
 import { NodeID } from "lib/trees"
 import { flatten, times } from "ramda"
-import { resolveRawNodes } from "state/bookmarks/data/fetch-bookmarks"
+import { resolveFetchedNodes } from "state/bookmarks/data/fetch-bookmarks"
 
 seed(34567989726504680)
 
@@ -43,9 +43,6 @@ const generateRawNodes = (
   return nodes
 }
 
-const rawNodes = generateRawNodes({ isFolder: true, nodeId: "root" })
-export const rootNode = resolveRawNodes(
-  new Map(rawNodes.map(n => [n.id, n] as [NodeID, FetchDocumentNode])),
-)
-
+export const rawNodes = generateRawNodes({ isFolder: true, nodeId: "root" })
+export const [rootNode] = resolveFetchedNodes(rawNodes)
 export const nodeList = rootNode.flatten()
