@@ -1,1 +1,1 @@
-export { AddBookmarkView } from "./component"
+export { AddBookmarkViewContainer as AddBookmarkView } from "./container"

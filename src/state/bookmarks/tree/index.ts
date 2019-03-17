@@ -1,6 +1,6 @@
 import { reducer } from "lib/reducer-builder"
 import { NodeID } from "lib/trees"
-import { remove, without } from "ramda"
+import { without } from "ramda"
 import { createAction } from "redux-actions"
 import { updateBookmarks } from "../data"
 

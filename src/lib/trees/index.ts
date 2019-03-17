@@ -1,9 +1,15 @@
-import { FetchDocumentNode } from "api/fetch-document"
 import { filter } from "fuzzy"
 import { Queue } from "lib/queue"
 import { reverse } from "ramda"
-import { BookmarksNode } from "state/bookmarks/data"
 import { NodeRef } from "./node-ref"
+
+export interface BookmarkNodeData {
+  label: string
+  href?: string
+}
+export type BookmarksNode = NodeRef<BookmarkNodeData>
+export type BookmarksNodeMap = Map<NodeID, BookmarksNode>
+export type ParsedTreeInfo = [BookmarksNode | undefined, BookmarksNodeMap]
 
 /**
  * Represents the ID of a node.
@@ -134,45 +140,6 @@ export const flattenTree = <TTree>(
   }
 
   return result
-}
-
-/**
- * Returns whether the given string is a valid url.
- * Makes use of the browser's URL constructor.
- *
- * @param url string to validate
- */
-export const isValidUrl = (url: string) => {
-  try {
-    const parsedUrl = new URL(url)
-    return !!parsedUrl
-  } catch (_) {
-    return false
-  }
-}
-
-/**
- * Regex used to parse the content of a dynalist document node for markdown url patterns.
- */
-const parseContentNodeRegex = /\[(.*)\]\((.*)\)/
-/**
- * Returns a label and optionally a href (url) parsed from the given node's content.
- *
- * @param node The node to parse.
- */
-export const parseNodeContent = (
-  node: FetchDocumentNode,
-): { label: string; href?: string } => {
-  if (!parseContentNodeRegex.test(node.content)) {
-    return { label: node.content }
-  }
-  const parsed = parseContentNodeRegex.exec(node.content)
-  const [, label, href] = parsed! // use use RegExp:test above
-
-  return {
-    label,
-    href: isValidUrl(href) ? href : undefined,
-  }
 }
 
 /**

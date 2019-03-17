@@ -1,9 +1,13 @@
 import { FetchDocumentNode } from "api/fetch-document"
-import { stat } from "fs"
-import { getBookmarkPath, NodeID, searchTree } from "lib/trees"
+import {
+  BookmarksNode,
+  getBookmarkPath,
+  NodeID,
+  ParsedTreeInfo,
+  searchTree,
+} from "lib/trees"
 import { createSelector } from "reselect"
 import { AppState } from "root-reducer"
-import { BookmarksNode, ParsedTreeInfo } from "."
 import { resolveFetchedNodes } from "./fetch-bookmarks"
 
 const EMPTY_RESULTS: BookmarksNode[] = []

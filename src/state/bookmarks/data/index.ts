@@ -1,19 +1,16 @@
 import { FetchDocumentNode } from "api/fetch-document"
 import { reducer } from "lib/reducer-builder"
 import { NodeID } from "lib/trees"
-import { NodeRef } from "lib/trees/node-ref"
+import { map, when } from "ramda"
 import { createAction } from "redux-actions"
 
 export { fetchBookmarksHandler } from "./fetch-bookmarks"
 
-export interface BookmarkNodeData {
-  label: string
-  href?: string
+export interface NewBookmarkData {
+  title: string
+  href: string
+  parentId: NodeID
 }
-
-export type BookmarksNode = NodeRef<BookmarkNodeData>
-export type BookmarksNodeMap = Map<NodeID, BookmarksNode>
-export type ParsedTreeInfo = [BookmarksNode | undefined, BookmarksNodeMap]
 
 export interface BookmarksDataState {
   nodes: FetchDocumentNode[]
@@ -27,6 +24,18 @@ export const initialDataState: BookmarksDataState = {
 }
 
 export const fetchBookmarks = createAction("bookmarks/fetch-bookmarks")
+export const addBookmark = createAction(
+  "bookmarks/save-bookmark",
+  (data: NewBookmarkData) => data,
+)
+export const insertBookmark = createAction(
+  "bookmarks/insert-bookmarkd",
+  (bookmark: FetchDocumentNode) => bookmark,
+)
+export const addChildToBookmark = createAction(
+  "bookmarks/addChildToBookmark",
+  (args: { nodeId: NodeID; childId: NodeID }) => args,
+)
 export const updateBookmarks = createAction(
   "bookmarks/update-bookmarks",
   (nodes: FetchDocumentNode[]) => nodes,
@@ -52,5 +61,26 @@ export const bookmarksDataReducer = reducer(initialDataState)
     ...state,
     loading: false,
     error: payload!,
+  }))
+  .addHandler(insertBookmark, (state, { payload }) => ({
+    ...state,
+    nodes: [...state.nodes, payload!],
+  }))
+  .addHandler(addChildToBookmark, (state, { payload }) => ({
+    ...state,
+    // see: https://goo.gl/wf1exh
+    // adds the given childId to the children of the node with the given nodeId
+    nodes: map(
+      node =>
+        when(
+          n => n.id === payload!.nodeId,
+          n => ({
+            ...n,
+            children: [...(n.children || []), payload!.childId],
+          }),
+          node,
+        ),
+      state.nodes,
+    ),
   }))
   .getReducer()

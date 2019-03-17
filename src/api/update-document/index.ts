@@ -1,6 +1,7 @@
 import { apiRequest } from "api/request"
 import { ApiResponse } from "api/types"
 import { NodeID } from "lib/trees"
+import { Omit } from "ramda"
 
 // documentation of API /doc/edit: https://apidocs.dynalist.io/#make-change-to-the-content-of-a-document
 
@@ -71,7 +72,7 @@ export type DocumentNodeChanges = Array<
  * Describes the dynalist API response of a document update request.
  */
 export interface UpdateDocumentContentResponse extends ApiResponse {
-  results: boolean[]
+  new_node_ids: NodeID[]
 }
 
 /**
@@ -91,3 +92,10 @@ export const updateDocumentContent = async (
     file_id: fileId,
     changes,
   })
+
+export const insertNodeChange = (
+  data: Omit<InsertNodeChange, "action">,
+): InsertNodeChange => ({
+  ...data,
+  action: "insert",
+})

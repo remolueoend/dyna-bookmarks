@@ -1,9 +1,9 @@
 import { render } from "enzyme"
 import { AddBookmarkView } from "./component"
 
-describe.skip("components/AddBookmarkView", () => {
-  it("renders correctly", () => {
-    const tree = render(<AddBookmarkView />)
+describe("components/AddBookmarkView", () => {
+  it.skip("renders correctly", () => {
+    const tree = render(<AddBookmarkView addBookmark={() => undefined} />)
     expect(tree).toBeFalsy()
   })
 })

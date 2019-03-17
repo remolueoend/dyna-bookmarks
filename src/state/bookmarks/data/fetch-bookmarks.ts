@@ -1,6 +1,7 @@
 import { fetchDocumentContent, FetchDocumentNode } from "api/fetch-document"
+import { parseMarkdownLinkText } from "lib/markdown"
 import { createAsyncHandlerFor } from "lib/redux-async"
-import { NodeID, parseNodeContent, resolveNodes } from "lib/trees"
+import { NodeID, resolveNodes } from "lib/trees"
 import { fetchBookmarks, updateBookmarks } from "."
 
 /**
@@ -20,7 +21,7 @@ export const resolveFetchedNodes = (fetchedNodes: FetchDocumentNode[]) => {
     )
   }
 
-  return resolveNodes(nodeMap, node => parseNodeContent(node))
+  return resolveNodes(nodeMap, node => parseMarkdownLinkText(node.content))
 }
 
 /**

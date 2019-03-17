@@ -1,6 +1,5 @@
 import { List } from "antd"
-import { getBookmarkPath } from "lib/trees"
-import { BookmarksNode } from "state/bookmarks/data"
+import { BookmarksNode, getBookmarkPath } from "lib/trees"
 import styled from "styled-components"
 import { ResultItem } from "../ResultItem"
 

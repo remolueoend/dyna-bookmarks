@@ -2,11 +2,7 @@
 import { FetchDocumentNode } from "api/fetch-document"
 import { AppState } from "root-reducer"
 import { BookmarksState } from "state/bookmarks"
-import {
-  BookmarksDataState,
-  BookmarksNode,
-  initialDataState,
-} from "state/bookmarks/data"
+import { BookmarksDataState, initialDataState } from "state/bookmarks/data"
 import { bookmarksImportInitState } from "state/bookmarks/import"
 import { BookmarksSearchState, initSearchState } from "state/bookmarks/search"
 import { BookmarksTreeState, initTreeState } from "state/bookmarks/tree"

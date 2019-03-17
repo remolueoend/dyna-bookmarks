@@ -1,6 +1,5 @@
-import Search from "antd/lib/input/Search"
-import { createRef, PureComponent } from "react"
-import { BookmarksNode } from "state/bookmarks/data"
+import { BookmarksNode } from "lib/trees"
+import { PureComponent } from "react"
 import styled from "styled-components"
 import { BookmarksView } from "../bookmarks-view/BookmarksView"
 
@@ -12,24 +11,13 @@ export interface ExplorerViewProps {
 const ExplorerViewBase = styled.div``
 
 export class ExplorerView extends PureComponent<ExplorerViewProps> {
-  protected searchInputRef = createRef<Search>()
-
   public render() {
     const { style, className } = this.props
     return (
       <ExplorerViewBase style={style} className={className}>
-        <BookmarksView
-          searchInputRef={this.searchInputRef}
-          onSelect={openNode}
-        />
+        <BookmarksView onSelect={openNode} />
       </ExplorerViewBase>
     )
-  }
-
-  public componentDidMount() {
-    if (this.searchInputRef.current) {
-      this.searchInputRef.current.focus()
-    }
   }
 }
 

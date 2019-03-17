@@ -1,6 +1,5 @@
 import { FetchDocumentNode } from "api/fetch-document"
 import { internet, lorem, random, seed } from "faker"
-import { NodeID } from "lib/trees"
 import { flatten, times } from "ramda"
 import { resolveFetchedNodes } from "state/bookmarks/data/fetch-bookmarks"
 

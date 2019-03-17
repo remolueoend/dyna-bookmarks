@@ -1,7 +1,6 @@
 import { Icon } from "components/core/Icon"
 import { exhaust } from "lib/exhaust"
 import { ViewIdentifier } from "state/view"
-import styled from "styled-components"
 
 export interface ViewToggleIconProps {
   style?: {}

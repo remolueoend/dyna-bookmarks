@@ -1,6 +1,5 @@
 import { Icon } from "antd"
-import { NodeID } from "lib/trees"
-import { BookmarksNode } from "state/bookmarks/data"
+import { BookmarksNode, NodeID } from "lib/trees"
 import styled, { css } from "styled-components"
 import { getThemeVar, styledWithProps } from "theme"
 
@@ -118,6 +117,7 @@ export const TreeNode: React.SFC<TreeNodeProps> = ({
         <NodeChildrenWrapper>
           {node.getChildRefs().map(child => (
             <TreeNode
+              key={child.id}
               style={style}
               className={className}
               node={child}

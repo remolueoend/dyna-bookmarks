@@ -1,7 +1,6 @@
 import { exhaust } from "lib/exhaust"
-import { NodeID } from "lib/trees"
+import { BookmarksNode, NodeID } from "lib/trees"
 import { without } from "ramda"
-import { BookmarksNode } from "../data"
 
 export type MoveNodeSelectionDir = "up" | "down" | "left" | "right"
 
