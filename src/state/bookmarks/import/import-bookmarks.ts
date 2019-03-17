@@ -12,36 +12,42 @@ import { flattenTree, NodeID } from "lib/trees"
 import { importBookmarks, importBookmarksFinished } from "."
 import { fetchBookmarks } from "../data"
 
+/**
+ * Async handler importing the browser's bookmark tree to dynalist.
+ */
 export const importBookmarksHandler = createAsyncHandlerFor(
   importBookmarks,
   async (_, dispatch) => {
-    const bookmarksTree = await browser.bookmarks.getTree()
-    const browserNodeList = flattenTree(
-      bookmarksTree[0],
-      node => node.children || [],
-    )
-
-    const fileId = "EaD2w6adnlYW6Chvgiv6uElb"
-    const token = process.env.DYNALIST_API_TOKEN || ""
-
-    const currentBookmarks = await fetchDocumentContent(token, fileId)
-
-    // tslint:disable:no-object-literal-type-assertion
-    const insertChanges: DocumentNodeChanges = [
-      ...currentBookmarks.nodes
-        // we do not want to delete the root of the dynalist document:
-        .filter(node => node.id !== "root")
-        .map(
-          node =>
-            ({
-              action: "delete",
-              node_id: node.id,
-            } as DeleteNodeChange),
-        ),
-      ...browserNodeList
+    try {
+      // get browser bookmark tree and flatten it:
+      const bookmarksTree = await browser.bookmarks.getTree()
+      const browserNodeList = flattenTree(
+        bookmarksTree[0],
+        node => node.children || [],
         // we want to ignore the root of browser bookmarks:
-        .filter(node => !!node.parentId)
-        .map(
+      ).filter(node => !!node.parentId)
+
+      const fileId = "EaD2w6adnlYW6Chvgiv6uElb"
+      const token = process.env.DYNALIST_API_TOKEN || ""
+
+      // fetch the current bookmarks from dynalist so that we can delete them all:
+      const currentBookmarks = await fetchDocumentContent(token, fileId)
+
+      // tslint:disable:no-object-literal-type-assertion
+      const insertChanges: DocumentNodeChanges = [
+        // delete current bookmarks from dynalist except root node:
+        ...currentBookmarks.nodes
+          // we do not want to delete the root of the dynalist document:
+          .filter(node => node.id !== "root")
+          .map(
+            node =>
+              ({
+                action: "delete",
+                node_id: node.id,
+              } as DeleteNodeChange),
+          ),
+        // insert new node for each browser bookmark without nesting them yet:
+        ...browserNodeList.map(
           node =>
             ({
               action: "insert",
@@ -49,58 +55,50 @@ export const importBookmarksHandler = createAsyncHandlerFor(
                 node.type === "bookmark"
                   ? `[${node.title}](${node.url})`
                   : node.title,
-              note: node.id,
               parent_id: "root",
             } as InsertNodeChange),
         ),
-    ]
-    await updateDocumentContent(token, fileId, insertChanges)
-    const tempNodes = await fetchDocumentContent(token, fileId)
-    const browserIdToDynaId = new Map(
-      tempNodes.nodes.map(
-        dynaNode => [dynaNode.note!, dynaNode.id] as [string, string],
-      ),
-    )
-    const browserNodeIdMap = new Map(
-      browserNodeList.map(
-        node => [node.id, node] as [string, browser.bookmarks.BookmarkTreeNode],
-      ),
-    )
+      ]
 
-    const resolveParentId = (node: FetchDocumentNode): NodeID => {
-      const browserId = node.note!
-      const browserNode = browserNodeIdMap.get(browserId)!
-      const browserParentId = browserNode.parentId
-      if (!browserParentId) {
-        return "root"
-      }
-      return browserIdToDynaId.get(browserParentId) || "root"
-    }
+      const flatInsertResult = await updateDocumentContent(
+        token,
+        fileId,
+        insertChanges,
+      )
 
-    const moveChanges: DocumentNodeChanges = [
-      ...tempNodes.nodes
-        .filter(node => !!node.note)
-        .map(
-          dynaNode =>
-            ({
-              action: "move",
-              node_id: dynaNode.id,
-              parent_id: resolveParentId(dynaNode),
-            } as MoveNodeChange),
+      // maps browser bookmark node IDs to their dynalist node IDs:
+      const resolveDynaNodeIdMap = new Map(
+        browserNodeList.map(
+          (browserNode, i) =>
+            [browserNode.id, flatInsertResult.new_node_ids[i]] as [
+              string,
+              NodeID
+            ],
         ),
-      ...tempNodes.nodes.map(
-        dynaNode =>
-          ({
-            action: "edit",
-            node_id: dynaNode.id,
-            note: "",
-          } as EditNodeChange),
-      ),
-    ]
+      )
 
-    await updateDocumentContent(token, fileId, moveChanges)
+      // move each node under its parent:
+      const moveChanges: DocumentNodeChanges = browserNodeList
+        // do not move nodes which have no parent, ie. are located directly under the root node
+        // which was not sent to dynalist (see above):
+        .filter(
+          node => !!node.parentId && resolveDynaNodeIdMap.has(node.parentId),
+        )
+        .map(browserNode => ({
+          action: "move" as "move",
+          node_id: resolveDynaNodeIdMap.get(browserNode.id)!,
+          parent_id: resolveDynaNodeIdMap.get(browserNode.parentId!)!,
+          index: -1,
+        }))
 
-    dispatch(fetchBookmarks())
-    dispatch(importBookmarksFinished())
+      await updateDocumentContent(token, fileId, moveChanges)
+
+      dispatch(fetchBookmarks())
+      dispatch(importBookmarksFinished())
+    } catch (err) {
+      dispatch(importBookmarksFinished())
+      // tslint:disable:no-console
+      alert(`Failed to import bookmarks: ${err.message}`)
+    }
   },
 )
