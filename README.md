@@ -1,5 +1,6 @@
-# dyna-bookmarks
+# Dynalist-Bookmarks
 
-[![Build Status](https://travis-ci.com/remolueoend/dynabookmarks.svg?branch=master)](https://travis-ci.com/remolueoend/dynabookmarks)
+Packages for managing URL bookmarks on [Dynalist](https://dynalist.io).
 
-This extensions allows you to save and open browser bookmarks directly to or from a dynalist document.
+* [packages/browser-extension](packages/browser-extension) provides a browser plugin to manage bookmarks from the browser.
+* [packages/cli](packages/cli) provides tools to manage bookmarks from the CLI.

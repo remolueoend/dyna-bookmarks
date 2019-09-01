@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+dir=$(dirname $0)
+
+# temporary source .env manually until env injection via GnuPass is working:
+if [ -f "$dir/.env" ]; then
+    export $(egrep -v '^#' "$dir/.env" | xargs)
+fi
+
+set -e
+
+bookmarks=$($dir/flatten-doc.js)
+selected_index=$(echo "$bookmarks" | awk -F "\t" '{print $1}' | rofi -dmenu -i -format d)
+url=$(echo "$bookmarks" | sed "${selected_index}q;d" | awk -F "\t" '{print $2}')
+
+$BROWSER "$url"
