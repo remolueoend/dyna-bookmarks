@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+set -e
+
+dir=$(dirname $0)
+
+# temporary source .env manually until env injection via GnuPass is working:
+if [ -f "$dir/.env" ]; then
+    export $(egrep -v '^#' "$dir/.env" | xargs)
+fi
+
+# load variables:
+source "$dir/vars.sh"
+
+# create cache folder if it does not exist:
+[ ! -d "$cache_dir" ] && mkdir -p "$cache_dir"
+
+bookmarks=$($dir/flatten-doc.js)
+
+echo "$bookmarks" > "$cache_file_path"

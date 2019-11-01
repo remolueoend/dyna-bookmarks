@@ -4,7 +4,6 @@
   "description": "Outputs nodes of a dynalist document in a flat data structure",
   "main": "index.js",
   "bin": "./index.js",
-  "type": "module",
   "author": "remolueoend <remolueoend@users.noreply.github.com>",
   "license": "MIT",
   "private": false,
