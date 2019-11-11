@@ -16,4 +16,8 @@ source "$dir/vars.sh"
 
 bookmarks=$($dir/flatten-doc.js)
 
-echo "$bookmarks" > "$cache_file_path"
+# only save output to file if no error occured:
+if [ $? -eq 0 ]; then
+    echo "$bookmarks" > "$cache_file_path"
+fi
+

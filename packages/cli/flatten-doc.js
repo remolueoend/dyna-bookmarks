@@ -45,4 +45,7 @@ const main = async env => {
 
 main(env)
   .then(console.log)
-  .catch(console.error)
+  .catch(e => {
+    console.error(e);
+    process.exit(1);
+  })
