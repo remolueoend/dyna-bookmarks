@@ -26,4 +26,15 @@ bookmarks=$(cat "$cache_file_path")
 selected_index=$(echo "$bookmarks" | awk -F "\t" '{print $1}' | rofi -dmenu -i -format d)
 url=$(echo "$bookmarks" | sed "${selected_index}q;d" | awk -F "\t" '{print $2}')
 
-$BROWSER "$url"
+# handle file path differently: spawn a ranger process for the given file URI
+# in a dropdown Terminal, so that the user can choose how to continue (open editor, etc):
+file_scheme_regex="file:\/\/(.*)"
+if [[ $url =~ $file_scheme_regex ]]; then
+	# ddpawn does not allow forwarding script arguments, therefore we use an env var:
+	export DDSPAWN_SCRIPT_ARGS="${BASH_REMATCH[1]}"
+	# ddspawn ranger
+	$TERMINAL -e $FILE $DDSPAWN_SCRIPT_ARGS
+else
+	xdg-open $url
+fi
+
