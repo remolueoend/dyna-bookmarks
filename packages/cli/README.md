@@ -7,5 +7,5 @@ This package consists of tools to manage bookmarks saved in a dynalist document 
 ./open-bookmark
 ```
 
-* Dependencies: `node`, `awk`, `rofi`, `sed`.
-* Environment variables: `TOKEN=dynalist API token`, `DOCUMENT_ID=dynalist file ID`, `BROWSER=web browser binary`
+* Dependencies: `node`, `awk`, `rofi`, `sed`, `xdg-open`.
+* Environment variables: `TOKEN=dynalist API token`, `DOCUMENT_ID=dynalist file ID`, `FILE=path to file explorer binary`
