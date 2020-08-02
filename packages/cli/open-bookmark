@@ -9,11 +9,6 @@ handle_cmd () {
 	$TERMINAL sh -c "$1"
 }
 
-# temporary source .env manually until env injection via GnuPass is working:
-if [ -f "$dir/.env" ]; then
-    export $(egrep -v '^#' "$dir/.env" | xargs)
-fi
-
 # load variables:
 source "$dir/vars.sh"
 
@@ -21,9 +16,9 @@ source "$dir/vars.sh"
 # else let the user see the currently cached bookmarks and
 # start an async download process in the background:
 if [ ! -f "$cache_file_path" ]; then
-    sh "$dir/download-bookmarks"
+    "$dir/download-bookmarks"
 else
-    sh "$dir/download-bookmarks" &
+    "$dir/download-bookmarks" &
 fi
 
 # display a rofi dropdown and open the selected link in the brower.

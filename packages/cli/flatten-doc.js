@@ -17,6 +17,7 @@ const env = envalid.cleanEnv(
   },
   {
     strict: true,
+    dotEnvPath: null,
   },
 )
 
