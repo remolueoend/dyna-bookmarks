@@ -3,6 +3,12 @@ set -e
 
 dir=$(dirname $0)
 
+# executes the given command in a new terminal
+# $1 command to execute
+handle_cmd () {
+	$TERMINAL sh -c "$1"
+}
+
 # temporary source .env manually until env injection via GnuPass is working:
 if [ -f "$dir/.env" ]; then
     export $(egrep -v '^#' "$dir/.env" | xargs)
@@ -26,15 +32,13 @@ bookmarks=$(cat "$cache_file_path")
 selected_index=$(echo "$bookmarks" | awk -F "\t" '{print $1}' | rofi -dmenu -i -format d)
 url=$(echo "$bookmarks" | sed "${selected_index}q;d" | awk -F "\t" '{print $2}')
 
-# handle file path differently: spawn a ranger process for the given file URI
-# in a dropdown Terminal, so that the user can choose how to continue (open editor, etc):
-file_scheme_regex="file:\/\/(.*)"
-if [[ $url =~ $file_scheme_regex ]]; then
-	# ddpawn does not allow forwarding script arguments, therefore we use an env var:
-	export DDSPAWN_SCRIPT_ARGS="${BASH_REMATCH[1]}"
-	# ddspawn ranger
-	$TERMINAL -e $FILE $DDSPAWN_SCRIPT_ARGS
-else
-	xdg-open $url
-fi
+# parse the scheme of the link url to take appropriate actions:
+cmd_scheme_regex="cmd:\/\/(.*)"
 
+if [[ $url =~ $cmd_scheme_regex ]]; then
+	handle_cmd "${BASH_REMATCH[1]}"
+else
+	# default action: open url using xdg-open.
+	# use eval to expand variables in urls, such as '$HOME' if a file:///-like url:
+	eval xdg-open $url
+fi
