@@ -2,15 +2,18 @@ const traverseDepthFirst = (
   node,
   getChildren,
   mapNode = n => n,
+  filterNode = (_node) => true,
   parentNode = null,
 ) => {
   const mappedNode = mapNode(node, parentNode)
   return [
     mappedNode,
     ...Array.prototype.concat(
-      ...getChildren(node).map(childNode =>
-        traverseDepthFirst(childNode, getChildren, mapNode, mappedNode),
-      ),
+      ...getChildren(node)
+        .filter(filterNode)
+        .map(childNode =>
+          traverseDepthFirst(childNode, getChildren, mapNode, filterNode, mappedNode),
+        ),
     ),
   ]
 }
@@ -42,9 +45,9 @@ const resolveNodePath = (node, getParent, getNodeTitle) => {
   const parent = getParent(node)
   return parent
     ? [
-        ...resolveNodePath(parent, getParent, getNodeTitle),
-        getNodeTitle(parent),
-      ]
+      ...resolveNodePath(parent, getParent, getNodeTitle),
+      getNodeTitle(parent),
+    ]
     : []
 }
 

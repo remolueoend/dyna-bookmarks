@@ -22,14 +22,19 @@ const env = envalid.cleanEnv(
 )
 
 const main = async env => {
+  // list structure of raw nodes (children/parents not resolved):
   const fileContent = await getFileContent(env.TOKEN, env.DOCUMENT_ID)
+  // tree structure where node parents/children are resolved:
   const nodeTree = resolveTree(fileContent.nodes)
+  // list structure of a DF traversal. The 3. argument maps a tree node to a list element:
   const nodes = traverseDepthFirst(
     nodeTree,
     n => n.children,
     (n, parent) => ({ parent, ...parseContentAsLink(n.content) }),
+    n => !n.checked
   )
 
+  // select subset of nodes which consist of a link:
   const linkNodes = nodes
     .filter(node => node.url)
     .map(node => ({
@@ -37,6 +42,7 @@ const main = async env => {
       path: resolveNodePath(node, n => n.parent, n => n.title),
     }))
 
+  // map each node to a string for displaying them in rofi:
   return linkNodes
     .map(
       node => `${[...node.path.slice(1), node.title].join("/")}\t${node.url}`,
