@@ -16,7 +16,7 @@ pub struct CleanCommandArgs {
 pub fn run_command(args: CleanCommandArgs) -> Result<()> {
     let cache_path = args.file_args.get_cache_file_path(&args.document_id)?;
     if cache_path.exists() {
-        fs::remove_file(args.file_args.get_cache_file_path(&args.document_id)?)?;
+        fs::remove_file(&cache_path)?;
     }
 
     Ok(())

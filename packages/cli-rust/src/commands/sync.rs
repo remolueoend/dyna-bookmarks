@@ -17,7 +17,7 @@ pub struct SyncCommandArgs {
 /// Runs the sync CLI command by downloading and parsing the content of the dynalist.io document
 /// with the given document id.
 /// The parsed content is stored in a local cache file.
-pub fn run_commands(args: SyncCommandArgs) -> Result<()> {
+pub fn run_command(args: SyncCommandArgs) -> Result<()> {
     let cache_path = args
         .file_args
         .get_cache_file_path(&args.api_args.document_id)?;

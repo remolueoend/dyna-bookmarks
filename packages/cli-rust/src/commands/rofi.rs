@@ -31,7 +31,7 @@ pub struct RofiCommandArgs {
 /// allowing the user to select a bookmark and opens it.
 /// While the rofi dialog is shown, the remote document is synced in the background (if not done so already).
 /// This procedure is usually known as 'offline-first'.
-pub fn run_commands(args: RofiCommandArgs) -> Result<()> {
+pub fn run_command(args: RofiCommandArgs) -> Result<()> {
     let cache_path = args
         .file_args
         .get_cache_file_path(&args.api_args.document_id)?;
@@ -53,10 +53,10 @@ pub fn run_commands(args: RofiCommandArgs) -> Result<()> {
         synced = true;
     }
 
-    // is either the result from initially reading the cache or after syncing it:
+    // this is either the result from initially reading the cache or after syncing it:
     match cache_result {
         Err(err) => {
-            // we failed to read the cache again, abort:
+            // we failed to read the cache once again, abort:
             return Err(err.wrap_err("failed to ready cache after sync"));
         }
         Ok(bookmarks) => {

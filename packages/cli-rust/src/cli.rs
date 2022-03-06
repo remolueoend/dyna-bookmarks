@@ -23,6 +23,8 @@ pub struct LocalFilesArgs {
     cache_dir: Option<String>,
 }
 impl LocalFilesArgs {
+    /// Returns the path to the local cache file for the given document id.
+    /// The path of the cache directory is either user provided or `$XDG_CACHE_HOME/dyna-bookmarks/`.
     pub fn get_cache_file_path(&self, document_id: &String) -> Result<PathBuf> {
         match &self.cache_dir {
             Some(cache_dir) => Ok(Path::new(&cache_dir).join(document_id)),

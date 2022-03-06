@@ -14,8 +14,8 @@ fn main() -> Result<()> {
     loggerv::init_with_verbosity(args.verbosity)?;
 
     match args.command {
-        SubCommandArgs::Rofi(args) => rofi::run_commands(args),
-        SubCommandArgs::Sync(args) => sync::run_commands(args),
+        SubCommandArgs::Rofi(args) => rofi::run_command(args),
+        SubCommandArgs::Sync(args) => sync::run_command(args),
         SubCommandArgs::Clean(args) => clean::run_command(args),
     }?;
 

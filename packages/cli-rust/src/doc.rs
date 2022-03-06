@@ -39,7 +39,7 @@ pub fn parse_document(nodes: &Vec<DynalistDocumentNode>) -> ParsedBookmarks {
                 .id,
         )
         .expect("doc::parse_document: missing root node");
-    // initialize the root with a path based on its own content:
+    // the DFS stack:
     let mut node_stack: Vec<DfsEntry> = Vec::from([DfsEntry {
         doc_node: root_node.doc_node,
         path: None,
@@ -58,10 +58,8 @@ pub fn parse_document(nodes: &Vec<DynalistDocumentNode>) -> ParsedBookmarks {
                 .get(child_id)
                 .expect("doc::parse_document: unknown child id");
             // skip over checked nodes. Do not include them or any of their children:
-            if let Some(checked) = child.doc_node.checked {
-                if checked {
-                    continue;
-                }
+            if let Some(true) = child.doc_node.checked {
+                continue;
             }
             // 1. we extend the path of a child by either: its link text or content if no a markdown link.
             // 2. we add the child to the bookmarks list if it consists of a markdown link
