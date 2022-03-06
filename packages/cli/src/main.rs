@@ -17,7 +17,5 @@ fn main() -> Result<()> {
         SubCommandArgs::Rofi(args) => rofi::run_command(args),
         SubCommandArgs::Sync(args) => sync::run_command(args),
         SubCommandArgs::Clean(args) => clean::run_command(args),
-    }?;
-
-    Ok(())
+    }
 }
