@@ -1,0 +1,33 @@
+[package]
+authors = ["remolueoend"]
+description = "Allows managing and opening bookmarks stored in a dynalist.io document"
+edition = "2018"
+name = "dyna-bookmarks"
+version = "0.1.0"
+[dependencies]
+color-eyre = "0.6.*"
+eyre = "0.6.*"
+lazy_static = "1.4.*"
+log = "0.4.*"
+loggerv = "0.7.*"
+regex = "1.5.*"
+serde_derive = "1.0.*"
+serde_json = "1.0.*"
+toml = "0.5.*"
+xdg = "2.4.*"
+
+[dependencies.clap]
+features = ["derive", "env"]
+version = "3.1.5"
+
+[dependencies.reqwest]
+features = ["json"]
+version = "0.11.*"
+
+[dependencies.serde]
+features = ["derive"]
+version = "1.0.*"
+
+[dependencies.tokio]
+features = ["full"]
+version = "1.17.*"
