@@ -1,4 +1,4 @@
-# Dynalist-Bookmarks
+# Dyna-Bookmarks
 
 Packages for managing URL bookmarks on [Dynalist](https://dynalist.io).
 
