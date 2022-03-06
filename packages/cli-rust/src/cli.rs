@@ -8,7 +8,7 @@ use crate::commands::{clean::CleanCommandArgs, rofi::RofiCommandArgs, sync::Sync
 #[derive(Parser, Debug)]
 pub struct ApiAccessArgs {
     /// the ID of the dynalist.io document.
-    #[clap(long)]
+    #[clap(long, env)]
     pub document_id: String,
 
     /// the API token provided by dynalist.io.
@@ -42,7 +42,7 @@ pub struct CliArgs {
     pub verbosity: u64,
 
     #[clap(subcommand)]
-    pub commands: SubCommandArgs,
+    pub command: SubCommandArgs,
 }
 
 #[derive(Subcommand, Debug)]

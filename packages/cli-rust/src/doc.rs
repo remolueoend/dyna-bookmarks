@@ -57,6 +57,12 @@ pub fn parse_document(nodes: &Vec<DynalistDocumentNode>) -> ParsedBookmarks {
             let child = node_map
                 .get(child_id)
                 .expect("doc::parse_document: unknown child id");
+            // skip over checked nodes. Do not include them or any of their children:
+            if let Some(checked) = child.doc_node.checked {
+                if checked {
+                    continue;
+                }
+            }
             // 1. we extend the path of a child by either: its link text or content if no a markdown link.
             // 2. we add the child to the bookmarks list if it consists of a markdown link
             let mut bookmark_url: Option<&str> = None;

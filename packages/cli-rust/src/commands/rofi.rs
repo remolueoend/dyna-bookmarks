@@ -21,6 +21,7 @@ pub struct RofiCommandArgs {
     /// path to the rofi executable.
     #[clap(long, default_value = "rofi")]
     rofi_exe: PathBuf,
+    /// the path of the binary to use for opening bookmarks.
     #[clap(long, default_value = "xdg-open")]
     open_exe: PathBuf,
 }
@@ -29,7 +30,7 @@ pub struct RofiCommandArgs {
 /// and tries to read the cache again. After successfully reading the cache, a rofi dialog is shown
 /// allowing the user to select a bookmark and opens it.
 /// While the rofi dialog is shown, the remote document is synced in the background (if not done so already).
-/// This procedure is usually called 'offline-first'.
+/// This procedure is usually known as 'offline-first'.
 pub fn run_commands(args: RofiCommandArgs) -> Result<()> {
     let cache_path = args
         .file_args

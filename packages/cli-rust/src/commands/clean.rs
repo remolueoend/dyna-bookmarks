@@ -8,7 +8,7 @@ pub struct CleanCommandArgs {
     #[clap(flatten)]
     file_args: LocalFilesArgs,
     /// the ID of the dynalist.io document.
-    #[clap(long)]
+    #[clap(long, env)]
     pub document_id: String,
 }
 
