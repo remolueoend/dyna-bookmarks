@@ -3,7 +3,7 @@ use eyre::Result;
 use std::path::{Path, PathBuf};
 use xdg::BaseDirectories;
 
-use crate::commands::{rofi::RofiCommandArgs, sync::SyncCommandArgs};
+use crate::commands::{clean::CleanCommandArgs, rofi::RofiCommandArgs, sync::SyncCommandArgs};
 
 #[derive(Parser, Debug)]
 pub struct ApiAccessArgs {
@@ -47,6 +47,10 @@ pub struct CliArgs {
 
 #[derive(Subcommand, Debug)]
 pub enum SubCommandArgs {
+    /// Open a rofi dialog for selecting and opening of a bookmark.
     Rofi(RofiCommandArgs),
+    /// Sync the dynalist.io remote document to the local cache.
     Sync(SyncCommandArgs),
+    /// Delete the local cache.
+    Clean(CleanCommandArgs),
 }
