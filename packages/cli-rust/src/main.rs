@@ -7,8 +7,7 @@ use dyna_bookmarks::{
 };
 use eyre::Result;
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     color_eyre::install()?;
 
     let args = CliArgs::parse();
@@ -16,7 +15,7 @@ async fn main() -> Result<()> {
 
     match args.commands {
         SubCommandArgs::Rofi(args) => rofi::run_commands(args),
-        SubCommandArgs::Sync(args) => sync::run_commands(args).await,
+        SubCommandArgs::Sync(args) => sync::run_commands(args),
         SubCommandArgs::Clean(args) => clean::run_command(args),
     }?;
 

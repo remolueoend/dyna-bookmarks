@@ -1,6 +1,6 @@
 use crate::doc::ParsedBookmarks;
 use eyre::Result;
-use log::info;
+use log::debug;
 use serde::{Deserialize, Serialize};
 use std::{fs, path::PathBuf};
 use xdg::BaseDirectories;
@@ -12,7 +12,6 @@ struct CacheContent {
 
 pub fn read_from_cache(cache_path: &PathBuf) -> Result<ParsedBookmarks> {
     let cache_content = fs::read_to_string(cache_path)?;
-    info!("trying to parse: {}", cache_content);
     let cache: CacheContent = toml::from_str(&cache_content)?;
 
     return Ok(cache.bookmarks);
@@ -25,6 +24,10 @@ pub fn write_to_cache(cache_path: &PathBuf, bookmarks: &ParsedBookmarks) -> Resu
     let stringified = toml::to_string(&CacheContent {
         bookmarks: bookmarks.to_vec(),
     })?;
+    debug!(
+        "updating local cache at: {}",
+        cache_path.to_str().unwrap_or_default()
+    );
     fs::write(cache_path, stringified)?;
 
     Ok(())

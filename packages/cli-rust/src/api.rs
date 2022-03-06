@@ -1,5 +1,6 @@
 use eyre::{eyre, Result};
-use reqwest::{Client, StatusCode};
+use log::debug;
+use reqwest::{blocking::Client, StatusCode};
 use serde::Deserialize;
 use serde_json::json;
 
@@ -32,7 +33,8 @@ impl<'a> ApiClient<'a> {
     }
 
     /// Fetches the content of the document with the given ID.
-    pub async fn get_document(&self, document_id: &String) -> Result<Vec<DynalistDocumentNode>> {
+    pub fn get_document(&self, document_id: &String) -> Result<Vec<DynalistDocumentNode>> {
+        debug!("fetching remote document with id {}", document_id);
         let resp = self
             .reqwest
             .post("https://dynalist.io/api/v1/doc/read")
@@ -41,12 +43,15 @@ impl<'a> ApiClient<'a> {
                 "token": self.api_token,
                 "file_id": document_id
             }))
-            .send()
-            .await?;
+            .send()?;
 
         match resp.status() {
             StatusCode::OK => {
-                let json = resp.json::<DynalistDocument>().await?;
+                let json = resp.json::<DynalistDocument>()?;
+                debug!(
+                    "got API response for document {} with code: {}",
+                    document_id, json._code
+                );
 
                 if json._code == "Ok" {
                     let nodes = json

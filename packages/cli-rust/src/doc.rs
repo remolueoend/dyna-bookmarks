@@ -14,7 +14,7 @@ struct NodeMapEntry<'a> {
 }
 struct DfsEntry<'a> {
     doc_node: &'a DynalistDocumentNode,
-    path: String,
+    path: Option<String>,
 }
 
 /// Accepts a dynalist document and returns a list of parsed bookmarks.
@@ -42,7 +42,7 @@ pub fn parse_document(nodes: &Vec<DynalistDocumentNode>) -> ParsedBookmarks {
     // initialize the root with a path based on its own content:
     let mut node_stack: Vec<DfsEntry> = Vec::from([DfsEntry {
         doc_node: root_node.doc_node,
-        path: String::from(""),
+        path: None,
     }]);
 
     while node_stack.len() > 0 {
@@ -59,20 +59,27 @@ pub fn parse_document(nodes: &Vec<DynalistDocumentNode>) -> ParsedBookmarks {
                 .expect("doc::parse_document: unknown child id");
             // 1. we extend the path of a child by either: its link text or content if no a markdown link.
             // 2. we add the child to the bookmarks list if it consists of a markdown link
-            let child_path = match parse_md_link(&child.doc_node.content) {
+            let mut bookmark_url: Option<&str> = None;
+            let path_segment = match parse_md_link(&child.doc_node.content) {
                 Some((text, url)) => {
-                    let path = format!("{}/{}", current_node.path, text);
-                    bookmarks.push((path.to_owned(), url.to_owned()));
-                    path
+                    bookmark_url = Some(url);
+                    text
                 }
-                None => {
-                    format!("{}/{}", current_node.path, child.doc_node.content)
-                }
+                None => child.doc_node.content.as_str(),
             };
 
+            // if the parent has no path (i.e. it is the root node),
+            // we do not prefix anything:
+            let child_path = match &current_node.path {
+                Some(parent_path) => format!("{}/{}", parent_path, path_segment),
+                None => format!("{}", path_segment),
+            };
+            if let Some(url) = bookmark_url {
+                bookmarks.push((child_path.to_owned(), url.to_owned()));
+            }
             node_stack.push(DfsEntry {
                 doc_node: child.doc_node,
-                path: child_path,
+                path: Some(child_path),
             });
         }
     }
