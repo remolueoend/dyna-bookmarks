@@ -1,4 +1,4 @@
-# Dyna-Bookmarks
+# Dyna-Bookmarks CLI
 
 This package provides a CLI binary to interact with bookmarks stored in a remote document at https://dynalist.io. To get started, create a new document at https://dynalist.io containing your bookmarks. Each (sub-) node in the document is either a directory node or a leaf node: Both of them may consist of arbitrary text or of a title and a URL formatted as Markdown. When running the command `dyna-bookmarks rofi`, the bookmarks of your document are displayed as a flatten list in a [rofi](https://github.com/davatorium/rofi) dialog, allowing you to fuzzy-search, select and open a bookmark. Let's look at an example document:
 ```sh
