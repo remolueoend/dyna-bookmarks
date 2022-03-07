@@ -31,7 +31,7 @@ Either download an available binary from the [release](https://github.com/remolu
 
 Most commands require a document ID and an API token. The ID of your bookmarks document can be found in the URL (last segment) when opening the document on dynalist.io. Your **personal** API key can be found at the [dynalist developer page](https://dynalist.io/developer).
 
-# Command Overview
+# Commandline Interface
 ```
 dyna-bookmarks 0.1.0
 remolueoend
