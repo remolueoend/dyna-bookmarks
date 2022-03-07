@@ -1,8 +1,0 @@
-/dist
-/web-ext-artifacts
-/node_modules
-*.log
-.DS_Store
-/coverage
-/storybook-static
-.env

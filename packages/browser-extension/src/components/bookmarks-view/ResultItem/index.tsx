@@ -1,1 +1,0 @@
-export { ResultItem } from "./component"
