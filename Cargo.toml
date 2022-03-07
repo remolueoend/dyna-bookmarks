@@ -1,9 +1,9 @@
 [package]
 authors = ["remolueoend"]
-description = "Allows managing and opening bookmarks stored in a dynalist.io document"
+description = "CLI tool for accessing bookmarks stored in a dynalist.io document."
 edition = "2018"
 name = "dyna-bookmarks"
-version = "0.1.0"
+version = "1.0.0"
 [dependencies]
 color-eyre = "0.6.*"
 eyre = "0.6.*"
