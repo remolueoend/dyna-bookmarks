@@ -33,7 +33,7 @@ Most commands require a document ID and an API token. The ID of your bookmarks d
 
 # Commandline Interface
 ```
-dyna-bookmarks 1.1.0
+dyna-bookmarks 1.1.1
 remolueoend
 CLI tool for accessing bookmarks stored in a dynalist.io document.
 
@@ -64,7 +64,7 @@ Use this command to update your local cache with the current version of the dyna
 This command deletes the local cache. When running `dyna-bookmarks rofi` afterward, the local cache is initiated again before displaying the `rofi` dialog.
 
 ## `list` Command
-This command prints the list of all locally cached bookmarks to stdout, each bookmark formatted as `<text>\t<url>`. To further process the bookmarks, you can change the format by piping the output into, e.g. `awk`: `dyna-bookmarks list | awk 'F'\t' '{print($1 "<<>>" $2)}'`, where `$1` refers to the bookmark text and `$2` to the bookmark URL.
+This command prints the list of all locally cached bookmarks to stdout, each bookmark formatted as `<text>\t<url>`. To further process the bookmarks, you can change the format by piping the output into, e.g. `awk`: `dyna-bookmarks list | awk -F'\t' '{print($1 "<<>>" $2)}'`, where `$1` refers to the bookmark text and `$2` to the bookmark URL.
 
 To sync the remote document to the local cache before or afterward, use the` dyna-bookmarks sync` command.
 
