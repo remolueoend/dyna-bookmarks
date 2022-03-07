@@ -3,7 +3,7 @@ authors = ["remolueoend"]
 description = "CLI tool for accessing bookmarks stored in a dynalist.io document."
 edition = "2018"
 name = "dyna-bookmarks"
-version = "1.0.0"
+version = "1.1.0"
 [dependencies]
 color-eyre = "0.6.*"
 eyre = "0.6.*"

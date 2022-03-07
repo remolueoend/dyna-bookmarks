@@ -33,9 +33,9 @@ Most commands require a document ID and an API token. The ID of your bookmarks d
 
 # Commandline Interface
 ```
-dyna-bookmarks 0.1.0
+dyna-bookmarks 1.1.0
 remolueoend
-Allows managing and opening bookmarks stored in a dynalist.io document
+CLI tool for accessing bookmarks stored in a dynalist.io document.
 
 USAGE:
     dyna-bookmarks [OPTIONS] <SUBCOMMAND>
@@ -48,7 +48,8 @@ OPTIONS:
 SUBCOMMANDS:
     clean    Delete the local cache
     help     Print this message or the help of the given subcommand(s)
-    rofi     Open a rofi dialog for selecting and opening a bookmark
+    list     Prints the list of locally cached bookmarks to stdout
+    rofi     Open a rofi dialog for selecting and opening of a bookmark
     sync     Sync the dynalist.io remote document to the local cache
 ```
 Use `dyna-bookmarks <COMMAND> --help` to get a detailed description of a command.
