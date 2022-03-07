@@ -22,9 +22,9 @@ To Read/Blogs
 To Read/Blogs/my fav blog
 To Read/Blogs/another blog
 ```
-* Directory nodes which themselves consist of a link will be rendered as their own bookmark
+* Directory nodes which themselves consist of a link, will be rendered as their own bookmark
 * Leaf nodes not consisting of a link will be ignored.
-* If a node is marked as checked on dynalist.io, the node and all its children are ignored.
+* If a node is marked as checked on dynalist.io, the node and its children are ignored.
 
 # Installation & Setup
 Either download an available binary from the [release](https://github.com/remolueoend/dyna-bookmarks/releases) page or use the [rustup](https://rustup.rs/) toolchain to build your own binary by running `cargo build --release` in this project directory. You'll find the binary under `./target/release/dyna-bookmarks`.
@@ -62,5 +62,10 @@ Use this command to update your local cache with the current version of the dyna
 ## `clean` Command
 This command deletes the local cache. When running `dyna-bookmarks rofi` afterward, the local cache is initiated again before displaying the `rofi` dialog.
 
-# Props
-Special thanks to [Dynalist](https://dynalist.io/) for their amazing tool.
+## `list` Command
+This command prints the list of all locally cached bookmarks to stdout, each bookmark formatted as `<text>\t<url>`. To further process the bookmarks, you can change the format by piping the output into, e.g. `awk`: `dyna-bookmarks list | awk 'F'\t' '{print($1 "<<>>" $2)}'`, where `$1` refers to the bookmark text and `$2` to the bookmark URL.
+
+To sync the remote document to the local cache before or afterward, use the` dyna-bookmarks sync` command.
+
+# Credits
+Special thanks to [Dynalist](https://dynalist.io/) for their fantastic tool.

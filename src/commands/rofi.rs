@@ -26,7 +26,7 @@ pub struct RofiCommandArgs {
     open_exe: PathBuf,
 }
 
-/// First tries to read the content of the cache file. If it fails, it syncs the local document
+/// First tries to read the content of the cache file. If it fails, it syncs the remote document
 /// and tries to read the cache again. After successfully reading the cache, a rofi dialog is shown
 /// allowing the user to select a bookmark and opens it.
 /// While the rofi dialog is shown, the remote document is synced in the background (if not done so already).

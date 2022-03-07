@@ -3,14 +3,15 @@ use eyre::Result;
 use std::path::{Path, PathBuf};
 use xdg::BaseDirectories;
 
-use crate::commands::{clean::CleanCommandArgs, rofi::RofiCommandArgs, sync::SyncCommandArgs};
+use crate::commands::{
+    clean::CleanCommandArgs, list::ListCommandArgs, rofi::RofiCommandArgs, sync::SyncCommandArgs,
+};
 
 #[derive(Parser, Debug)]
 pub struct ApiAccessArgs {
     /// the ID of the dynalist.io document.
     #[clap(long, env)]
     pub document_id: String,
-
     /// the API token provided by dynalist.io.
     #[clap(long, env)]
     pub api_token: String,
@@ -55,4 +56,6 @@ pub enum SubCommandArgs {
     Sync(SyncCommandArgs),
     /// Delete the local cache.
     Clean(CleanCommandArgs),
+    /// Prints the list of locally cached bookmarks to stdout.
+    List(ListCommandArgs),
 }

@@ -10,6 +10,8 @@ struct CacheContent {
     bookmarks: ParsedBookmarks,
 }
 
+/// Returns the content of the local cache as a list of parsed bookmarks.
+/// Fails if the cache cannot be parsed or does not exist.
 pub fn read_from_cache(cache_path: &PathBuf) -> Result<ParsedBookmarks> {
     let cache_content = fs::read_to_string(cache_path)?;
     let cache: CacheContent = toml::from_str(&cache_content)?;

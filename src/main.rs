@@ -2,6 +2,7 @@ use clap::StructOpt;
 use dyna_bookmarks::{
     cli::{CliArgs, SubCommandArgs},
     commands::clean,
+    commands::list,
     commands::rofi,
     commands::sync,
 };
@@ -17,5 +18,6 @@ fn main() -> Result<()> {
         SubCommandArgs::Rofi(args) => rofi::run_command(args),
         SubCommandArgs::Sync(args) => sync::run_command(args),
         SubCommandArgs::Clean(args) => clean::run_command(args),
+        SubCommandArgs::List(args) => list::run_command(args),
     }
 }
