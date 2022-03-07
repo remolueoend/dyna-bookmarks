@@ -27,7 +27,7 @@ To Read/Blogs/another blog
 * If a node is marked as checked on dynalist.io, the node and all its children are ignored.
 
 # Installation & Setup
-There are currently no pre-build binaries available. Use the [rustup](https://rustup.rs/) toolchain to build your binary by running `cargo build --release` in this project directory. You'll find the binary under `./target/release/dyna-bookmarks`.
+Either download an available binary from the [release](https://github.com/remolueoend/dyna-bookmarks/releases) page or use the [rustup](https://rustup.rs/) toolchain to build your own binary by running `cargo build --release` in this project directory. You'll find the binary under `./target/release/dyna-bookmarks`.
 
 Most commands require a document ID and an API token. The ID of your bookmarks document can be found in the URL (last segment) when opening the document on dynalist.io. Your **personal** API key can be found at the [dynalist developer page](https://dynalist.io/developer).
 
