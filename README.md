@@ -1,6 +1,8 @@
 # Dyna-Bookmarks
 
-This repository provides a CLI binary to interact with bookmarks stored in a remote document at https://dynalist.io. To get started, create a new document at https://dynalist.io containing your bookmarks. Each (sub-) node in the document is either a directory node or a leaf node: Both of them may consist of arbitrary text or of a title and a URL formatted as Markdown. When running the command `dyna-bookmarks rofi`, the bookmarks of your document are displayed as a flatten list in a [rofi](https://github.com/davatorium/rofi) dialog, allowing you to fuzzy-search, select and open a bookmark. Let's look at an example document:
+This repository provides a CLI binary to interact with bookmarks stored in a remote document at https://dynalist.io, allowing you to sync and access bookmarks on any device easily. It uses [rofi](https://github.com/davatorium/rofi) as a frontend, allowing you to access all your bookmarks with a single shortcut. On unsupported devices such as smartphones, you can use the official Dynalist.io app instead. 
+
+To get started, create a new document at https://dynalist.io containing your bookmarks. Each (sub-) node in the document is either a directory node or a leaf node: Both may consist of arbitrary text or a title and a URL formatted as Markdown. When running the command `dyna-bookmarks rofi`, the bookmarks of your document are displayed as a flattened list in a rofi dialog, allowing you to fuzzy-search, select, and open a bookmark. Let's look at an example document:
 ```
 * To Read
 |- * [Blogs](https://my-rss-reader.org)
